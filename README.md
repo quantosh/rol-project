@@ -1,9 +1,15 @@
+# Rol project
+
 ## Trello
-[Tablero](https://trello.com/b/KH4n8wIj/rol-project)
+[Enlace al tablero de trello](https://trello.com/b/KH4n8wIj/rol-project)
 
 ## Excalidraw
 ¡Cuidado con borrar!
-[Pizarra](https://excalidraw.com/#room=152718766960a57681c6,MNYmSwwE0NL-1ncrGyBECQ)
+[Drawings con Luca](https://excalidraw.com/#room=152718766960a57681c6,MNYmSwwE0NL-1ncrGyBECQ)
+
+## Main deploy
+[![Netlify Status](https://api.netlify.com/api/v1/badges/46e46229-0af2-4c38-a6a6-137bd3f3c7da/deploy-status)](https://app.netlify.com/sites/taupe-marshmallow-7ff78b/deploys)
+
 
 # React + Vite
 
