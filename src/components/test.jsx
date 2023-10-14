@@ -4,33 +4,38 @@ function Test() {
   return (
     <div className="max-w-fit">
       <div className="p-2 bg-white border border-gray-200 rounded-lg shadow m-1">
-        <p className="py-2 block text-[8px]">
+        <p className="text-[8px]">
           Character info
         </p>
-        <div className="flex">
+        <div className="flex text-[8px] align-center text-center bg-yellow-100 rounded-full justify-between">
+          <div className="div">Mery Jenkins</div>
+          <div className="div"></div>
+          <div className="div">Guerrillera</div>         
+        </div>
+        <div className="flex ">
           <div className="">
             <img src="https://api.dicebear.com/7.x/big-smile/svg" width="100px" height="100px" alt="Character Portrait" />
           </div>
-          <div className="text-[8px] flex items-center justify-center">
+          <div className="text-[8px] block items-center justify-center">
             <ul>
+            <div className="p-1 flex bg-gray-200 rounded-sm mb-4 justify-between">
+                <p className="">HP</p>
+                <div className="flex bg-green-300 rounded-sm w-24 text-white content-center"></div>
+                <p className="">80%</p>
+              </div>
+              <li className="bg-green-300 px-1 py-0.5 mb-1 rounded-sm ">HP</li>
+              <li className="bg-blue-300 px-1 py-0.5 mb-1 rounded-sm">MP</li>
+              <li className="bg-yellow-300 px-1 py-0.5 mb-1 rounded-sm">STA</li>
+            </ul>
+            <ul className="mt-1">
               <li>Height: 1,74CM</li>
               <li>Weight: 80KG</li>
               <li>Age: 24</li>
             </ul>
           </div>
         </div>
-        <div className="align-center text-center">
-          <p className="text- font-semibold">
-            Mery Jenkins
-          </p>
-          <p className="text-xs text-slate-600">
-            Revienta puertas
-          </p>
-          <blockquote className="text-center text-xs bg-gradient-to-r from-blue-600 via-yellow-500 to-yellow-400 text-transparent bg-clip-text">
-            ¡Soy invencible!
-          </blockquote>
-        </div>
-        <div className="mt-2">
+        <p className="mt-2 ml-2 block text-[8px]">Stats</p>
+        <div className="">
           <div className="flex-row">
             <Stat statType="HP" statName="HP" statValue="17" />
             <Stat statType="STA" statName="STA" statValue="8" />
