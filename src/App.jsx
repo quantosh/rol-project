@@ -1,19 +1,19 @@
 import './App.css'
-import CharacterInfo from '@components/characterInfo'
-import Dice from '@components/dice'
-import Test from '@components/test'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from '@components/login'
+import Dashboard from '@components/dashboard'
 
 function App() {
-  
   return (
-    <>
-    <div className="block ">
-      <CharacterInfo></CharacterInfo>
-      <Test></Test>
-      <Dice></Dice>
-      <Dice></Dice>
+    <div className="block">
+        <Router>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </Router>
     </div>
-    </>
   )
 }
 
