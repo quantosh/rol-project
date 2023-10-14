@@ -1,0 +1,30 @@
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #2e2e2e;
+}
+  
+input[type="submit"] {
+    background: #4bffa5;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    background: #ffd6a5;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+label,
+input {
+  display: block;
+  margin: 10px auto;
+}

@@ -1,6 +1,6 @@
 import React from 'react';
-import '../styles/login.css';
 import { useNavigate } from "react-router-dom";
+import '../styles/login.css';
 
 function Login() {
     const navigate = useNavigate();
@@ -12,6 +12,11 @@ function Login() {
       navigate("/dashboard");
     };
 
+    const handleRegisterButtonClick  = (e) => {
+        e.preventDefault();
+        navigate("/register");
+      };
+
   return (
     <div className="container">
       <div className="login-box">
@@ -22,9 +27,9 @@ function Login() {
           <label htmlFor="password">Password</label>
           <input type="password" id="password" name="password" required />
 
-          <input type="submit" value="Login" />
+          <input type="submit" class="login-box-login-button" value="Login" />
         </form>
-        <button className="register-button">Register</button>
+        <button className="login-box-register-button" onClick={handleRegisterButtonClick}>Register</button>
       </div>
     </div>
   );
