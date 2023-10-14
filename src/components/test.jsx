@@ -21,7 +21,7 @@ function Test() {
       </div>
       <div className="">
         <div className="flex">
-          <Stat statName="STR" statValue="17" />
+          <Stat statType="STR" statName="STR" statValue="17" />
           <Stat statName="DEX" statValue="8" />
           <Stat statName="CON" statValue="9" />
         </div>

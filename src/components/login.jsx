@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from "react-router-dom";
 import '../styles/login.css';
 
@@ -27,7 +26,7 @@ function Login() {
           <label htmlFor="password">Password</label>
           <input type="password" id="password" name="password" required />
 
-          <input type="submit" class="login-box-login-button" value="Login" />
+          <input type="submit" className="login-box-login-button" value="Login" />
         </form>
         <button className="login-box-register-button" onClick={handleRegisterButtonClick}>Register</button>
       </div>

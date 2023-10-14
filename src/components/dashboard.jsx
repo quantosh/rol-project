@@ -1,14 +1,13 @@
-import CharacterInfo from '@components/characterInfo'
 import Dice from '@components/dice'
 import Test from '@components/test'
+import Inventory from './inventory'
 
 function Dashboard() {
   
   return (
-    <div className="block ">
-      <CharacterInfo></CharacterInfo>
+    <div className="block">
       <Test></Test>
-      <Dice></Dice>
+      <Inventory></Inventory>
       <Dice></Dice>
     </div>
   )

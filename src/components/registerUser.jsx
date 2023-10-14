@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from "react-router-dom";
 import '../styles/registerUser.css';
 
@@ -25,7 +24,7 @@ function RegisterUser() {
           <label htmlFor="email">Email</label>
           <input type="email" id="email" name="email" />
           
-          <input type="submit" class="register-box-register-button" value="Register" />
+          <input type="submit" className="register-box-register-button" value="Register" />
         </form>
       </div>
     </div>
