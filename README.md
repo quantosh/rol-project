@@ -1,4 +1,4 @@
-# Rol project
+![](./src/assets/Banner%20readme%20-%201325%20x%20135.png)
 
 ## Trello
 [Enlace al tablero de trello](https://trello.com/b/KH4n8wIj/rol-project)
