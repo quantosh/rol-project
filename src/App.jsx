@@ -1,10 +1,11 @@
 import './App.css'
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from '@components/login'
 import Dashboard from '@components/dashboard'
 import RegisterUser from './components/registerUser';
 
-function App() {
+function App() {  
   return (
     <div className="block">
         <Router>
