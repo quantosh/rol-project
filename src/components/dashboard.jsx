@@ -2,6 +2,7 @@ import Dice from '@components/dice'
 import Test from '@components/test'
 import Inventory from './inventory'
 import Card from './card'
+import CharStatus from './charStatus'
 
 function Dashboard() {
   
@@ -11,6 +12,7 @@ function Dashboard() {
       <Inventory></Inventory>
       <Dice></Dice>
       <Card></Card>
+      <CharStatus></CharStatus>
     </div>
   )
 }

@@ -7,7 +7,7 @@ function Test() {
         <p className="text-[8px]">
           Character info
         </p>
-        <div className="flex text-[8px] align-center text-center bg-yellow-100 rounded-full justify-between">
+        <div className="flex text-[8px] align-center text-center rounded-full justify-between px-1.5 py-0.5 items-center bg-slate-200 my-1">
           <div className="div">Mery Jenkins</div>
           <div className="div"></div>
           <div className="div">Guerrillera</div>         
@@ -16,13 +16,8 @@ function Test() {
           <div className="">
             <img src="https://api.dicebear.com/7.x/big-smile/svg" width="100px" height="100px" alt="Character Portrait" />
           </div>
-          <div className="text-[8px] block items-center justify-center">
+          <div className="text-[8px] block items-center justify-center mt-2 w-full">
             <ul>
-            <div className="p-1 flex bg-gray-200 rounded-sm mb-4 justify-between">
-                <p className="">HP</p>
-                <div className="flex bg-green-300 rounded-sm w-24 text-white content-center"></div>
-                <p className="">80%</p>
-              </div>
               <li className="bg-green-300 px-1 py-0.5 mb-1 rounded-sm ">HP</li>
               <li className="bg-blue-300 px-1 py-0.5 mb-1 rounded-sm">MP</li>
               <li className="bg-yellow-300 px-1 py-0.5 mb-1 rounded-sm">STA</li>
