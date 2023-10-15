@@ -1,0 +1,66 @@
+  .panel-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .lobbies-buttons {
+    margin-top: 20px;
+  }
+  
+  .retro-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #FFD700; 
+    color: #000;
+    text-decoration: none;
+    font-size: 18px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .retro-button:hover {
+    background-color: #FFA500;
+    color: #fff;
+  }
+  
+  h1 {
+    font-size: 36px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-top: 20px;
+  }
+  
+  .lobbies-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+  /* Style for alternating row colors */
+  .lobbies-item:nth-child(even) {
+    background-color: #FF6B6B;
+    padding: 10px;
+    border: 1px solid #000;
+  }
+  
+  .lobbies-item:nth-child(odd) {
+    background-color: #6BFF6B; /* Light Green */
+    padding: 10px;
+    border: 1px solid #000;
+  }
+
+  .lobbies-list-header {
+    margin-top: 20px;
+    background-color: #6bffff; /* Light Red, same as odd rows */
+    font-weight: bold;
+    padding: 10px;
+    border-top: 1px solid #000; /* Add a top border to separate header from the list */
+    border-bottom: 1px solid #000; /* Add a bottom border to the header */
+  }
+  /* Add more styling as needed */
+  
