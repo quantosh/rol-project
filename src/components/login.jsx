@@ -22,11 +22,14 @@ function Login() {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        if (errorCode === 'auth/invalid-email' || errorCode === 'auth/wrong-password') {
-          toast.error('Invalid email or password');
-        } else {
-          toast.error(errorMessage);
-          console.log(errorMessage);
+        switch (errorCode) {
+          case 'auth/invalid-email':
+          case 'auth/invalid-login-credentials':
+            toast.error('Invalid email or password');
+            break;
+          default:
+            toast.error(errorMessage);
+            console.log(errorMessage);
         }
       });
   };
