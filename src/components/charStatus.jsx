@@ -1,11 +1,11 @@
 function charStatus() {
   return (
-    <div className="max-w-fit">
+    <div className="max-w-fit text-black">
       <div className="p-2 bg-white border border-gray-200 rounded-lg shadow m-1">
-        <p className="py-2 block text-[8px]">
+        <p className="text-base">
           Team status
         </p>
-        <div className="flex">
+        <div className="flex mt-1">
           <div className="block">
             <div className="">
               <img src="https://api.dicebear.com/7.x/big-smile/svg?seed=Sassy" width="50px" height="50px" alt="Character Portrait" />

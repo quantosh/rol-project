@@ -1,9 +1,9 @@
 function Inventory() {
 
   return (
-    <div className="max-w-fit">
+    <div className="max-w-fit text-black">
       <div className="p-2 bg-white border border-gray-200 rounded-lg shadow m-1">
-        <p className="py-2 block text-[8px]">
+        <p className="block text-base">
           Inventory
         </p>
         <div className="transform transition duration-500 grid grid-cols-4 bg-slate-100 p-1 hover:bg-slate-200 rounded-md text-2xl">

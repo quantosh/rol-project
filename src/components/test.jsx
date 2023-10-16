@@ -2,19 +2,19 @@ import Stat from '@components/stat'
 
 function Test() {
   return (
-    <div className="max-w-fit">
-      <div className="p-2 bg-white border border-gray-200 rounded-lg shadow m-1">
-        <p className="text-[8px]">
+    <div className="max-w-fit text-black">
+      <div className="p-2 bg-white border border-gray-200 rounded-lg shadow m-1 text-c">
+        <p className="text-base">
           Character info
         </p>
-        <div className="flex text-[8px] align-center text-center rounded-full justify-between px-1.5 py-0.5 items-center bg-slate-200 my-1">
+        <div className="flex text-[12px] align-center text-center rounded-full justify-between px-1.5 py-0.5 items-center bg-slate-200 my-1 ">
           <div className="div">Mery Jenkins</div>
           <div className="div"></div>
           <div className="div">Guerrillera</div>         
         </div>
         <div className="flex ">
           <div className="">
-            <img src="https://api.dicebear.com/7.x/big-smile/svg" width="100px" height="100px" alt="Character Portrait" />
+            <img src="https://api.dicebear.com/7.x/big-smile/svg" width="100px" height="100px" alt="Character Portrait " />
           </div>
           <div className="text-[8px] block items-center justify-center mt-2 w-full">
             <ul>

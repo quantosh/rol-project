@@ -1,9 +1,9 @@
 function Dice() {
 
   return (
-    <div className="max-w-fit">
+    <div className="max-w-fit ">
       <div className="bg-white border border-gray-200 rounded-lg shadow m-1 p-2">
-        <p className="py-2 text-[8px]">
+        <p className="text-base text-black">
           Dice
         </p>
         <div className="content-center align-middle justify-center">
