@@ -1,8 +1,8 @@
 function Inventory() {
 
   return (
-    <div className="max-w-fit text-black">
-      <div className="p-2 bg-white border border-gray-200 rounded-lg shadow m-1">
+    <div className="max-w-fit ">
+      <div className="bg-white border border-gray-200 rounded-lg shadow m-1 p-2">
         <p className="block text-base">
           Inventory
         </p>

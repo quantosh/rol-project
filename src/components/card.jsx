@@ -2,7 +2,7 @@ function Card() {
 
   return (
     <div className="max-w-fit text-black">
-      <div className="max-w-[220px] p-2 rounded-xl shadow m-1 bg-white">
+      <div className="max-w-[220px] p-2 rounded-xl border shadow m-1 bg-white">
         <div className=" rounded-lg">
           <div className="text-base p-1">
             Heal potion

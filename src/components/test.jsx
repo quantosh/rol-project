@@ -2,7 +2,7 @@ import Stat from '@components/stat'
 
 function Test() {
   return (
-    <div className="max-w-fit text-black">
+    <div className="max-w-6030 text-black">
       <div className="p-2 bg-white border border-gray-200 rounded-lg shadow m-1 text-c">
         <p className="text-base">
           Character info
