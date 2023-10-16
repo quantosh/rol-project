@@ -15,7 +15,7 @@ function Login() {
 
     signInWithEmailAndPassword(auth, email, password)
       .then(_ => {
-        navigate("/dashboard");
+        navigate("/lobbies");
       })
       .catch((error) => {
         const errorCode = error.code;
