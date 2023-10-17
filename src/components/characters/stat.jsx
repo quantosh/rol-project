@@ -1,22 +1,17 @@
-import bicepImage from '../../assets/BICEP.png';
-import heartImage from '../../assets/HP.png';
-import inteligenceImage from '../../assets/INT.png';
-import brainImage from '../../assets/WIS.png';
-import staminaImage from '../../assets/STA.png';
-import agilityImage from '../../assets/AGI.png';
+
 
 function Stat(props) {
   const { statType, statName, statValue } = props;
   const imageMapping = {
-    'STR': bicepImage,
+    'STR': null,
     'DEX': null,
     'CON': null,
-    'INT': inteligenceImage,
-    'WIS': brainImage,
+    'INT': null,
+    'WIS': null,
     'CHA': null,
-    'STA': staminaImage,
-    'AGI': agilityImage,
-    'HP': heartImage,
+    'STA': null,
+    'AGI': null,
+    'HP': null,
   };
 
   return (
