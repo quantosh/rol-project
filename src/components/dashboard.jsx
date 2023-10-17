@@ -1,22 +1,32 @@
-import Dice from '@components/dice'
-import Test from '@components/test'
+import Dice from './dices/dice'
+import Test from './characters/test'
 import Inventory from './inventory'
-import Card from './card'
-import CharStatus from './charStatus'
+import Card from './cards/card'
+import CharStatus from './characters/charStatus'
 import Theme from './theme'
-import CharacterCard from './characterCard'
+import CharacterCard from './characters/characterCard'
+import ZCard from './cards/zCard'
+import HCard from './cards/hCard'
 
 function Dashboard() {
 
   return (
     <div className="q">
       <div className="flex">
+        <HCard></HCard>
+      </div>
+      <div className="q">
+        <ZCard></ZCard>
         <CharacterCard></CharacterCard>
-        <Test></Test>
-        <Inventory></Inventory>
-        <Dice></Dice>
-        <Card></Card>
         <CharStatus></CharStatus>
+      </div>
+      <div className="q">
+        <Card></Card>
+        <Inventory></Inventory>
+      </div>
+      <div className="q">
+        <Test></Test>
+        <Dice></Dice>
       </div>
       <div className=""><Theme></Theme></div>
     </div>

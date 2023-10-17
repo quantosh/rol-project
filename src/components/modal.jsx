@@ -7,7 +7,7 @@ const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue
     }
     
     return (
-        <div className="modal">
+        <div className="card-body">
             <div className="modal-content">
                 <h2>{title}</h2>
                 <input
