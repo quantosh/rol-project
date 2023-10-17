@@ -13,21 +13,26 @@ function Dashboard() {
   return (
     <div className="q">
       <div className="flex">
-        <HCard></HCard>
+
       </div>
-      <div className="q">
-        <ZCard></ZCard>
+      <h1 className="text-xl m-2">Character components</h1>
+      <div className="flex">
+        <Test></Test>
         <CharacterCard></CharacterCard>
         <CharStatus></CharStatus>
       </div>
-      <div className="q">
+      <h1 className="text-xl m-2">Cards components</h1>
+      <div className="flex"> 
         <Card></Card>
-        <Inventory></Inventory>
+        <ZCard></ZCard>
+        <HCard></HCard>
       </div>
+      <h1 className="text-xl m-2">Logic components</h1>
       <div className="q">
-        <Test></Test>
+        <Inventory></Inventory>
         <Dice></Dice>
       </div>
+      <h1 className="text-xl m-2">Other components</h1>
       <div className=""><Theme></Theme></div>
     </div>
   )
