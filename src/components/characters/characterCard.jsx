@@ -1,4 +1,4 @@
-import Stat from '@components/stat'
+import Stat from './stat'
 
 function CharacterCard() {
   return (
