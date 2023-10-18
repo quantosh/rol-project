@@ -1,5 +1,4 @@
-function Card() {
-
+function Card () {
   return (
     <div className="max-w-fit text-black">
       <div className="max-w-[220px] p-2 rounded-xl border shadow m-1 bg-white">

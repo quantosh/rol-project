@@ -1,5 +1,4 @@
-function HCard() {
-
+function HCard () {
   return (
     <div className="flex ">
       <div className="block ">
@@ -12,7 +11,7 @@ function HCard() {
             </div>
             <div className="text-xl text-white text-center mb-2">Caballero</div>
             <div className="flex justify-center items-center align-middle">
-              <div class="flex w-[350px] text-center rounded-full justify-center items-center align-middle backdrop-blur-sm border border-zinc-100">
+              <div className="flex w-[350px] text-center rounded-full justify-center items-center align-middle backdrop-blur-sm border border-zinc-100">
                 <img src="src\assets\necron.png" width="70%" alt="" />
               </div>
 
