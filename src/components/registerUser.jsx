@@ -17,11 +17,15 @@ function RegisterUser() {
       .then(async (userCredential) => {
         const user = userCredential.user;
 
-        await addDoc(collection(db, "users"), {
-          email: user.email
-        });
-
-        navigate("/lobbies");
+        if (user) {
+          await addDoc(collection(db, "users"), {
+            email: user.email,
+            username: '',
+            joinedLobbies: []
+          });
+          
+          navigate("/lobbies");
+        }
       })
       .catch((error) => {
         const errorCode = error.code;
