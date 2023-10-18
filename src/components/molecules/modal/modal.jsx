@@ -1,4 +1,4 @@
-import '../styles/modal.css'
+import styles from './styles.module.css'
 
 const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue, actionButtonText, cancelButtonText, placeholder, hideTextBox }) => {
   if (!show) {
@@ -7,7 +7,7 @@ const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue
 
   return (
         <div className="card-body">
-            <div className="modal-content">
+            <div className={styles['modal-content']}>
             <h2>{title}</h2>
                 {!hideTextBox && (
                     <input
@@ -17,7 +17,7 @@ const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue
                         placeholder={placeholder}
                     />
                 )}
-                <div className="modal-actions">
+                <div className={styles['modal-actions']}>
                     <button onClick={handleAction}>{actionButtonText}</button>
                     <button onClick={handleClose}>{cancelButtonText}</button>
                 </div>

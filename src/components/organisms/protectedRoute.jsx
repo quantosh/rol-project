@@ -1,4 +1,4 @@
-import { auth } from '../main'
+import { auth } from '../../main'
 import { Navigate } from 'react-router-dom'
 import { useAuthState } from 'react-firebase-hooks/auth'
 

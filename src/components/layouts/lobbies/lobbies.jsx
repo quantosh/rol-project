@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import Modal from './modal'
+import Modal from '../../molecules/modal/modal'
 import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, getDoc, query, getDocs, arrayUnion } from 'firebase/firestore'
-import { db, auth } from '../main'
+import { db, auth } from '../../../main'
 import { toast, ToastContainer } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 
-import '../styles/lobbies.css'
+import styles from './styles.module.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 const Lobbies = () => {
@@ -197,14 +197,14 @@ const Lobbies = () => {
   return (
     <div className="lobbies-container">
       <div className="lobbies-buttons">
-        <button onClick={openCreateModal} className="retro-button">Create Lobby</button>
-        <button onClick={openJoinModal} className="retro-button">Join Lobby</button>
-        <Link to="/view-characters" className="retro-button">Create Character Sheet</Link>
-        <Link to="/create-character" className="retro-button">View Character Sheets</Link>
+        <button onClick={openCreateModal} className={styles['retro-button']}>Create Lobby</button>
+        <button onClick={openJoinModal} className={styles['retro-button']}>Join Lobby</button>
+        <Link to="/view-characters" className={styles['retro-button']}>Create Character Sheet</Link>
+        <Link to="/create-character" className={styles['retro-button']}>View Character Sheets</Link>
       </div>
 
-      <h2 className="lobbies-list-header">Your lobbies:</h2>
-      <table className="lobbies-list">
+      <h2 className={styles['lobbies-list-header']}>Your lobbies:</h2>
+      <table className={styles['lobbies-list']}>
         <thead>
           <tr>
             <th>Name</th>

@@ -1,4 +1,4 @@
-import Stat from './stat'
+import Stat from '../../atoms/characters/stat'
 
 function Test () {
   return (

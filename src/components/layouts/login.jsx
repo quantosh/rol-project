@@ -1,48 +1,41 @@
 import { useNavigate } from 'react-router-dom'
-import { auth, db } from '../main'
+import { auth } from '../../main'
 import { ToastContainer, toast } from 'react-toastify'
 import { useState } from 'react'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { addDoc, collection } from 'firebase/firestore'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import 'react-toastify/dist/ReactToastify.css'
 
-function RegisterUser () {
+function Login () {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const user = userCredential.user
 
-        if (user) {
-          await addDoc(collection(db, 'users'), {
-            email: user.email,
-            username: '',
-            joinedLobbies: []
-          })
-
-          navigate('/lobbies')
-        }
+    signInWithEmailAndPassword(auth, email, password)
+      .then(_ => {
+        navigate('/lobbies')
       })
       .catch((error) => {
         const errorCode = error.code
         const errorMessage = error.message
 
         switch (errorCode) {
-          case 'auth/email-already-in-use':
-            toast.error('Email already in use')
-            break
-          case 'auth/weak-password':
-            toast.error('Password should be at least 6 characters')
+          case 'auth/invalid-email':
+          case 'auth/invalid-login-credentials':
+            toast.error('Invalid email or password')
             break
           default:
             toast.error(errorMessage)
             console.log(errorMessage)
         }
       })
+  }
+
+  const handleRegisterButtonClick = (e) => {
+    e.preventDefault()
+    navigate('/register')
   }
 
   return (
@@ -53,15 +46,15 @@ function RegisterUser () {
         </div>
         <div className="card shadow-xl bg-slate-100">
           <div className="card-body">
-            <h2 className="card-title font-press-start ">Register</h2>
+            <h2 className="card-title font-press-start ">Login</h2>
             <form onSubmit={handleSubmit}>
               <label className="label font-press-start text-xs" htmlFor="email">Email</label>
-              <input className="input input-bordered w-full max-w-xs" type="email" id="email" name="email" onChange={(e) => setEmail(e.target.value)} required />
+              <input className="input input-bordered w-full max-w-xs" htmlFor="grid-password" type="text" id="email" name="email" onChange={(e) => setEmail(e.target.value)} required />
               <label className="label font-press-start text-xs" htmlFor="password">Password</label>
               <input className="input input-bordered w-full max-w-xs" type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
               <div className="flex justify-between">
-                <input type="button" className="btn btn-active btn-accent mt-2" onClick="{goBack}" value="Back" />
-                <input className="btn btn-primary mt-2" type="submit" value="Register" />
+                <input type="submit" className="btn btn-primary mt-2" value="Login" />
+                <button className="btn mt-2" onClick={handleRegisterButtonClick}>Register</button>
               </div>
             </form>
           </div>
@@ -78,4 +71,4 @@ function RegisterUser () {
   )
 }
 
-export default RegisterUser
+export default Login

@@ -1,10 +1,9 @@
-import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Login from '@components/login'
-import Dashboard from '@components/dashboard'
-import RegisterUser from './components/registerUser'
-import Lobbies from './components/lobbies'
-import ProtectedRoute from './components/protectedRoute'
+import Login from './components/layouts/login'
+import Dashboard from './components/layouts/dashboard'
+import RegisterUser from './components/layouts/registerUser'
+import Lobbies from './components/layouts/lobbies/lobbies'
+import ProtectedRoute from './components/organisms/protectedRoute'
 
 function App () {
   return (

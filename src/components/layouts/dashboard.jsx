@@ -1,12 +1,12 @@
-import Dice from './dices/dice'
-import Test from './characters/test'
-import Inventory from './inventory'
-import Card from './cards/card'
-import CharStatus from './characters/charStatus'
-import Theme from './theme'
-import CharacterCard from './characters/characterCard'
-import ZCard from './cards/zCard'
-import HCard from './cards/hCard'
+import Dice from '../atoms/dice'
+import Test from '../molecules/characters/test'
+import Inventory from '../molecules/inventory'
+import Card from '../atoms/cards/card'
+import CharStatus from '../atoms/characters/charStatus'
+import Theme from '../molecules/theme'
+import CharacterCard from '../atoms/characters/characterCard'
+import ZCard from '../atoms/cards/zCard'
+import HCard from '../atoms/cards/hCard'
 
 function Dashboard () {
   return (
