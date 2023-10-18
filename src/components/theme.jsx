@@ -1,5 +1,4 @@
-function Theme() {
-
+function Theme () {
   return (
     <div className="max-w-fit p-2 ml-1 bg-white border border-gray-200 rounded-lg shadow m-1 text-white">
       <div className="text-base p-1 text-black">

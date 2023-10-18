@@ -1,42 +1,42 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 import { auth } from '../main'
-import { ToastContainer, toast } from 'react-toastify';
-import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import { useState } from 'react'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import 'react-toastify/dist/ReactToastify.css'
 
-function Login() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function Login () {
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     signInWithEmailAndPassword(auth, email, password)
       .then(_ => {
-        navigate("/lobbies");
+        navigate('/lobbies')
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        const errorCode = error.code
+        const errorMessage = error.message
 
         switch (errorCode) {
           case 'auth/invalid-email':
           case 'auth/invalid-login-credentials':
-            toast.error('Invalid email or password');
-            break;
+            toast.error('Invalid email or password')
+            break
           default:
-            toast.error(errorMessage);
-            console.log(errorMessage);
+            toast.error(errorMessage)
+            console.log(errorMessage)
         }
-      });
-  };
+      })
+  }
 
   const handleRegisterButtonClick = (e) => {
-    e.preventDefault();
-    navigate("/register");
-  };
+    e.preventDefault()
+    navigate('/register')
+  }
 
   return (
     <section className="bg-blueGray-50">
@@ -68,7 +68,7 @@ function Login() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
-export default Login;
+export default Login

@@ -1,6 +1,6 @@
 import { auth } from '../main'
-import { Navigate, } from "react-router-dom"
-import { useAuthState } from "react-firebase-hooks/auth"
+import { Navigate } from 'react-router-dom'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 const ProtectedRoute = ({ children }) => {
   const [user, loading] = useAuthState(auth)
@@ -14,10 +14,10 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (user) {
-    return children;
+    return children
   } else {
-    return <Navigate to={"/"} replace={true} />
+    return <Navigate to={'/'} replace={true} />
   }
 }
 
-export default ProtectedRoute;
+export default ProtectedRoute

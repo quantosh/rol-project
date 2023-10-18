@@ -1,12 +1,11 @@
-import React from 'react';
-import '../styles/modal.css';
+import '../styles/modal.css'
 
 const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue, actionButtonText, cancelButtonText, placeholder, hideTextBox }) => {
-    if (!show){
-        return null;
-    }
-    
-    return (
+  if (!show) {
+    return null
+  }
+
+  return (
         <div className="card-body">
             <div className="modal-content">
             <h2>{title}</h2>
@@ -24,7 +23,7 @@ const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue
                 </div>
             </div>
         </div>
-    );
-};
+  )
+}
 
-export default Modal;
+export default Modal

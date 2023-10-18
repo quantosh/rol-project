@@ -8,8 +8,7 @@ import CharacterCard from './characters/characterCard'
 import ZCard from './cards/zCard'
 import HCard from './cards/hCard'
 
-function Dashboard() {
-
+function Dashboard () {
   return (
     <div className="q">
       <div className="flex">
@@ -22,7 +21,7 @@ function Dashboard() {
         <CharStatus></CharStatus>
       </div>
       <h1 className="text-xl m-2">Cards components</h1>
-      <div className="flex"> 
+      <div className="flex">
         <Card></Card>
         <ZCard></ZCard>
         <HCard></HCard>

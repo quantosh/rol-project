@@ -1,50 +1,49 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 import { auth, db } from '../main'
-import { ToastContainer, toast } from 'react-toastify';
-import { useState } from 'react';
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import { useState } from 'react'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { addDoc, collection } from 'firebase/firestore'
+import 'react-toastify/dist/ReactToastify.css'
 
-function RegisterUser() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function RegisterUser () {
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        const user = userCredential.user;
+        const user = userCredential.user
 
         if (user) {
-          await addDoc(collection(db, "users"), {
+          await addDoc(collection(db, 'users'), {
             email: user.email,
             username: '',
             joinedLobbies: []
-          });
-          
-          navigate("/lobbies");
+          })
+
+          navigate('/lobbies')
         }
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        const errorCode = error.code
+        const errorMessage = error.message
 
         switch (errorCode) {
           case 'auth/email-already-in-use':
-            toast.error('Email already in use');
-            break;
+            toast.error('Email already in use')
+            break
           case 'auth/weak-password':
-            toast.error('Password should be at least 6 characters');
-            break;
+            toast.error('Password should be at least 6 characters')
+            break
           default:
-            toast.error(errorMessage);
-            console.log(errorMessage);
+            toast.error(errorMessage)
+            console.log(errorMessage)
         }
-      });
-      
-  };
+      })
+  }
 
   return (
     <section className="bg-blueGray-50">
@@ -76,7 +75,7 @@ function RegisterUser() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
-export default RegisterUser;
+export default RegisterUser

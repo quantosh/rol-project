@@ -1,6 +1,6 @@
-import Stat from './stat';
+import Stat from './stat'
 
-function Test() {
+function Test () {
   return (
     <div className="max-w-6030 text-black">
       <div className="p-2 bg-white border border-gray-200 rounded-lg shadow m-1 text-c">
@@ -10,7 +10,7 @@ function Test() {
         <div className="flex text-[12px] align-center text-center rounded-full justify-between px-1.5 py-0.5 items-center bg-slate-200 my-1 ">
           <div className="div">Mery Jenkins</div>
           <div className="div"></div>
-          <div className="div">Guerrillera</div>         
+          <div className="div">Guerrillera</div>
         </div>
         <div className="flex ">
           <div className="">

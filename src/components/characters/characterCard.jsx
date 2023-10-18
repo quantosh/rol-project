@@ -1,6 +1,6 @@
 import Stat from './stat'
 
-function CharacterCard() {
+function CharacterCard () {
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow m-1 p-2">
       <p className="text-base mb-1">
@@ -24,7 +24,7 @@ function CharacterCard() {
         <Stat statType="STR" statName="CHA" statValue="7" />
       </div>
     </div>
-  );
+  )
 }
 
-export default CharacterCard;
+export default CharacterCard

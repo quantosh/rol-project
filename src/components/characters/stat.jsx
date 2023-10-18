@@ -1,18 +1,16 @@
-
-
-function Stat(props) {
-  const { statType, statName, statValue } = props;
+function Stat (props) {
+  const { statType, statName, statValue } = props
   const imageMapping = {
-    'STR': null,
-    'DEX': null,
-    'CON': null,
-    'INT': null,
-    'WIS': null,
-    'CHA': null,
-    'STA': null,
-    'AGI': null,
-    'HP': null,
-  };
+    STR: null,
+    DEX: null,
+    CON: null,
+    INT: null,
+    WIS: null,
+    CHA: null,
+    STA: null,
+    AGI: null,
+    HP: null
+  }
 
   return (
     <div className="p-2 ml-1 mt-1 max-w-sm bg-white rounded-xl border flex items-center space-x-2">

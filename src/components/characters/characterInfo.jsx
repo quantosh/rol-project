@@ -1,4 +1,4 @@
-function CharacterInfo() {
+function CharacterInfo () {
   return (
     <div className="flex flex-row bg-pink-400 p-1 mx-2 mt-2 rounded-md text-center max-w-xs">
       <div className="flex bg-orange-100">

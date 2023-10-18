@@ -1,199 +1,198 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Modal from './modal';
-import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, getDoc, query, getDocs, arrayUnion } from "firebase/firestore";
-import { db } from '../main';
-import { toast, ToastContainer } from 'react-toastify';
-import { v4 as uuidv4 } from 'uuid';
-import { auth } from '../main'
-import '../styles/lobbies.css';
-import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import Modal from './modal'
+import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, getDoc, query, getDocs, arrayUnion } from 'firebase/firestore'
+import { db, auth } from '../main'
+import { toast, ToastContainer } from 'react-toastify'
+import { v4 as uuidv4 } from 'uuid'
+
+import '../styles/lobbies.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Lobbies = () => {
-  const [joinModalVisible, setJoinModalVisible] = useState(false);
-  const [inputLobbyCode, setInputLobbyCode] = useState('');
-  const [createModalVisible, setCreateModalVisible] = useState(false);
-  const [lobbyName, setLobbyName] = useState('');
-  const [joinedLobbies, setJoinedLobbies] = useState([]);
+  const [joinModalVisible, setJoinModalVisible] = useState(false)
+  const [inputLobbyCode, setInputLobbyCode] = useState('')
+  const [createModalVisible, setCreateModalVisible] = useState(false)
+  const [lobbyName, setLobbyName] = useState('')
+  const [joinedLobbies, setJoinedLobbies] = useState([])
 
   const fetchLobbiesByIds = async (lobbyIds) => {
     try {
-      const lobbies = [];
+      const lobbies = []
       for (const id of lobbyIds) {
-        const docRef = doc(db, "lobbies", id);
-        const docSnap = await getDoc(docRef);
+        const docRef = doc(db, 'lobbies', id)
+        const docSnap = await getDoc(docRef)
 
         if (docSnap.exists()) {
-          lobbies.push({ ...docSnap.data(), id: docSnap.id });
+          lobbies.push({ ...docSnap.data(), id: docSnap.id })
         } else {
-          console.log(`No lobby found with id: ${id}`);
+          console.log(`No lobby found with id: ${id}`)
         }
       }
-      return lobbies;
+      return lobbies
     } catch (error) {
-      console.error("Error fetching lobbies by IDs: ", error);
-      return [];
+      console.error('Error fetching lobbies by IDs: ', error)
+      return []
     }
-  };
+  }
 
   useEffect(() => {
     const fetchJoinedLobbies = async () => {
       try {
-        const user = auth.currentUser;
+        const user = auth.currentUser
         if (user) {
-          const userDocData = (await getCurrentUserDoc()).data();
-          const userLobbiesIds = userDocData.joinedLobbies || [];
-          const userLobbies = await fetchLobbiesByIds(userLobbiesIds);
-          setJoinedLobbies(userLobbies);
+          const userDocData = (await getCurrentUserDoc()).data()
+          const userLobbiesIds = userDocData.joinedLobbies || []
+          const userLobbies = await fetchLobbiesByIds(userLobbiesIds)
+          setJoinedLobbies(userLobbies)
         }
       } catch (error) {
-        console.error("Error fetching lobbies: ", error);
+        console.error('Error fetching lobbies: ', error)
       }
-    };
+    }
 
-    fetchJoinedLobbies();
-  }, []);
+    fetchJoinedLobbies()
+  }, [])
 
   const deleteLobby = async (lobby) => {
-    if (!window.confirm("Are you sure you want to leave this lobby?")) return;
+    if (!window.confirm('Are you sure you want to leave this lobby?')) return
 
     try {
-      const user = auth.currentUser;
-      setJoinedLobbies(joinedLobbies.filter(l => l.id !== lobby.id));
-      const userDocRef = await getCurrentUserDocRef();
+      const user = auth.currentUser
+      setJoinedLobbies(joinedLobbies.filter(l => l.id !== lobby.id))
+      const userDocRef = await getCurrentUserDocRef()
 
       await updateDoc(userDocRef, {
         joinedLobbies: arrayRemove(lobby.id)
-      });
+      })
 
       if (user && lobby.creator === user.email) {
-        let batch = writeBatch(db);
-        const lobbyRef = doc(db, "lobbies", lobby.id);
-        batch.delete(lobbyRef);
+        const batch = writeBatch(db)
+        const lobbyRef = doc(db, 'lobbies', lobby.id)
+        batch.delete(lobbyRef)
 
         // TODO: This will be bad for performance if there are many users (thousands, so we are good for now)
-        const allUsersSnapshot = await getDocs(collection(db, "users"));
+        const allUsersSnapshot = await getDocs(collection(db, 'users'))
         allUsersSnapshot.forEach(async (userDoc) => {
-          const joinedLobbiesRef = doc(db, "users", userDoc.id, "joinedLobbies", lobby.id);
-          const joinedLobbySnapshot = await getDoc(joinedLobbiesRef);
+          const joinedLobbiesRef = doc(db, 'users', userDoc.id, 'joinedLobbies', lobby.id)
+          const joinedLobbySnapshot = await getDoc(joinedLobbiesRef)
           if (joinedLobbySnapshot.exists()) {
-            batch.delete(joinedLobbiesRef);
+            batch.delete(joinedLobbiesRef)
           }
-        });
+        })
 
-        await batch.commit();
-        toast.success("Lobby deleted successfully!");
-      }
-      else {
-        toast.success("Lobby left successfully!");
+        await batch.commit()
+        toast.success('Lobby deleted successfully!')
+      } else {
+        toast.success('Lobby left successfully!')
       }
     } catch (error) {
-      toast.error("Error deleting lobby: ", error);
-      console.log("Error deleting lobby: ", error);
+      toast.error('Error deleting lobby: ', error)
+      console.log('Error deleting lobby: ', error)
     }
-  };
+  }
 
   const getCurrentUserDoc = async () => {
-    const user = auth.currentUser;
-    const userEmail = user.email;
-    const usersCollection = collection(db, "users");
-    return (await getDocs(query(usersCollection, where("email", "==", userEmail)))).docs[0];
-  };
+    const user = auth.currentUser
+    const userEmail = user.email
+    const usersCollection = collection(db, 'users')
+    return (await getDocs(query(usersCollection, where('email', '==', userEmail)))).docs[0]
+  }
 
   const getCurrentUserDocRef = async () => {
-    const user = auth.currentUser;
-    const userEmail = user.email;
-    const usersCollection = collection(db, "users");
-    const q = query(usersCollection, where("email", "==", userEmail));
-    return (await getDocs(q)).docs[0].ref;
-  };
+    const user = auth.currentUser
+    const userEmail = user.email
+    const usersCollection = collection(db, 'users')
+    const q = query(usersCollection, where('email', '==', userEmail))
+    return (await getDocs(q)).docs[0].ref
+  }
 
   const openCreateModal = () => {
-    setCreateModalVisible(true);
-  };
+    setCreateModalVisible(true)
+  }
 
   const closeCreateModal = () => {
-    setCreateModalVisible(false);
-    setLobbyName('');
-  };
+    setCreateModalVisible(false)
+    setLobbyName('')
+  }
 
   const openJoinModal = () => {
-    setJoinModalVisible(true);
-  };
+    setJoinModalVisible(true)
+  }
 
   const closeJoinModal = () => {
-    setJoinModalVisible(false);
-    setInputLobbyCode('');
-  };
+    setJoinModalVisible(false)
+    setInputLobbyCode('')
+  }
 
   const createLobby = async () => {
     if (!lobbyName.trim()) {
-      toast.error("Lobby name cannot be empty!");
-      return;
+      toast.error('Lobby name cannot be empty!')
+      return
     }
 
     try {
-      const user = auth.currentUser;
+      const user = auth.currentUser
 
       if (!user) {
-        toast.error("You must be logged in to create a lobby");
-        throw new Error("User must be logged in to create a lobby");
+        toast.error('You must be logged in to create a lobby')
+        throw new Error('User must be logged in to create a lobby')
       }
 
       const newLobby = {
         code: uuidv4().substring(0, 8),
         name: lobbyName.trim(),
         creator: user.email
-      };
+      }
 
-      const docRef = await addDoc(collection(db, "lobbies"), newLobby);
+      const docRef = await addDoc(collection(db, 'lobbies'), newLobby)
       await updateDoc(await getCurrentUserDocRef(), {
         joinedLobbies: arrayUnion(docRef.id)
-      });
+      })
 
-      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: docRef.id }]);
-      toast.success("Lobby created successfully!");
-      closeCreateModal();
+      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: docRef.id }])
+      toast.success('Lobby created successfully!')
+      closeCreateModal()
     } catch (e) {
-      toast.error("Error adding lobby: ", e);
-      console.log("Error adding lobby: ", e);
+      toast.error('Error adding lobby: ', e)
+      console.log('Error adding lobby: ', e)
     }
-  };
+  }
 
   const joinLobby = async () => {
     try {
-      const lobbyQuery = query(collection(db, "lobbies"), where("code", "==", inputLobbyCode.trim()));
-      const querySnapshot = await getDocs(lobbyQuery);
-  
+      const lobbyQuery = query(collection(db, 'lobbies'), where('code', '==', inputLobbyCode.trim()))
+      const querySnapshot = await getDocs(lobbyQuery)
+
       if (querySnapshot.empty) {
-        toast.error("No lobby exists with the provided code.");
-        return;
+        toast.error('No lobby exists with the provided code.')
+        return
       }
-  
-      const lobbyToJoin = querySnapshot.docs[0].data();
-      const lobbyId = querySnapshot.docs[0].id; // Capture the document ID
-  
-      const userDocRef = await getCurrentUserDocRef();
-      const userDoc = await getDoc(userDocRef);
-      const userData = userDoc.data();
-  
+
+      const lobbyToJoin = querySnapshot.docs[0].data()
+      const lobbyId = querySnapshot.docs[0].id // Capture the document ID
+
+      const userDocRef = await getCurrentUserDocRef()
+      const userDoc = await getDoc(userDocRef)
+      const userData = userDoc.data()
+
       if (userData.joinedLobbies.includes(lobbyId)) {
-        toast.info("You are already in this lobby.");
-        return;
+        toast.info('You are already in this lobby.')
+        return
       }
-  
+
       await updateDoc(userDocRef, {
         joinedLobbies: arrayUnion(lobbyId)
-      });
-  
-      setJoinedLobbies([...joinedLobbies, {...lobbyToJoin, id: lobbyId}]);
-      toast.success("Joined the lobby successfully!");
-      closeJoinModal();
+      })
+
+      setJoinedLobbies([...joinedLobbies, { ...lobbyToJoin, id: lobbyId }])
+      toast.success('Joined the lobby successfully!')
+      closeJoinModal()
     } catch (error) {
-      toast.error("Error joining lobby: ", error);
-      console.log("Error joining lobby: ", error);
+      toast.error('Error joining lobby: ', error)
+      console.log('Error joining lobby: ', error)
     }
-  };
+  }
 
   return (
     <div className="lobbies-container">
@@ -254,7 +253,7 @@ const Lobbies = () => {
 
       <ToastContainer />
     </div>
-  );
-};
+  )
+}
 
-export default Lobbies;
+export default Lobbies

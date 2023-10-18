@@ -1,4 +1,4 @@
-function charStatus() {
+function charStatus () {
   return (
     <div className="max-w-fit text-black">
       <div className="p-2 bg-white border border-gray-200 rounded-lg shadow m-1">
