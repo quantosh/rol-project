@@ -158,7 +158,7 @@ const Lobbies = () => {
         <Link to="/create-character" className="retro-button">View Character Sheets</Link>
       </div>
 
-      <h2 className="lobbies-list-header">Your Joined Lobbies:</h2>
+      <h2 className="lobbies-list-header">Your lobbies:</h2>
       <table className="lobbies-list">
         <thead>
           <tr>
