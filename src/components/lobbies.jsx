@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Modal from './modal';
-import { collection, addDoc, doc, updateDoc, deleteDoc, writeBatch, arrayRemove, where, setDoc, getDoc, query, getDocs, arrayUnion } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, getDoc, query, getDocs, arrayUnion } from "firebase/firestore";
 import { db } from '../main';
 import { toast, ToastContainer } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +10,8 @@ import '../styles/lobbies.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Lobbies = () => {
+  const [joinModalVisible, setJoinModalVisible] = useState(false);
+  const [inputLobbyCode, setInputLobbyCode] = useState('');
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [lobbyName, setLobbyName] = useState('');
   const [joinedLobbies, setJoinedLobbies] = useState([]);
@@ -20,7 +22,7 @@ const Lobbies = () => {
       for (const id of lobbyIds) {
         const docRef = doc(db, "lobbies", id);
         const docSnap = await getDoc(docRef);
-  
+
         if (docSnap.exists()) {
           lobbies.push({ ...docSnap.data(), id: docSnap.id });
         } else {
@@ -53,16 +55,16 @@ const Lobbies = () => {
   }, []);
 
   const deleteLobby = async (lobby) => {
-    if (!window.confirm("Are you sure you want to delete this lobby?")) return;
+    if (!window.confirm("Are you sure you want to leave this lobby?")) return;
 
     try {
-        const user = auth.currentUser;
-        setJoinedLobbies(joinedLobbies.filter(l => l.id !== lobby.id));
-        const userDocRef = await getCurrentUserDocRef();
+      const user = auth.currentUser;
+      setJoinedLobbies(joinedLobbies.filter(l => l.id !== lobby.id));
+      const userDocRef = await getCurrentUserDocRef();
 
-        await updateDoc(userDocRef, {
-          joinedLobbies: arrayRemove(lobby.id)
-        });
+      await updateDoc(userDocRef, {
+        joinedLobbies: arrayRemove(lobby.id)
+      });
 
       if (user && lobby.creator === user.email) {
         let batch = writeBatch(db);
@@ -115,6 +117,15 @@ const Lobbies = () => {
     setLobbyName('');
   };
 
+  const openJoinModal = () => {
+    setJoinModalVisible(true);
+  };
+
+  const closeJoinModal = () => {
+    setJoinModalVisible(false);
+    setInputLobbyCode('');
+  };
+
   const createLobby = async () => {
     if (!lobbyName.trim()) {
       toast.error("Lobby name cannot be empty!");
@@ -128,19 +139,19 @@ const Lobbies = () => {
         toast.error("You must be logged in to create a lobby");
         throw new Error("User must be logged in to create a lobby");
       }
-  
+
       const newLobby = {
         code: uuidv4().substring(0, 8),
         name: lobbyName.trim(),
         creator: user.email
       };
-  
+
       const docRef = await addDoc(collection(db, "lobbies"), newLobby);
       await updateDoc(await getCurrentUserDocRef(), {
         joinedLobbies: arrayUnion(docRef.id)
       });
 
-      setJoinedLobbies([...joinedLobbies, {...newLobby, id: docRef.id}]);
+      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: docRef.id }]);
       toast.success("Lobby created successfully!");
       closeCreateModal();
     } catch (e) {
@@ -149,11 +160,46 @@ const Lobbies = () => {
     }
   };
 
+  const joinLobby = async () => {
+    try {
+      const lobbyQuery = query(collection(db, "lobbies"), where("code", "==", inputLobbyCode.trim()));
+      const querySnapshot = await getDocs(lobbyQuery);
+  
+      if (querySnapshot.empty) {
+        toast.error("No lobby exists with the provided code.");
+        return;
+      }
+  
+      const lobbyToJoin = querySnapshot.docs[0].data();
+      const lobbyId = querySnapshot.docs[0].id; // Capture the document ID
+  
+      const userDocRef = await getCurrentUserDocRef();
+      const userDoc = await getDoc(userDocRef);
+      const userData = userDoc.data();
+  
+      if (userData.joinedLobbies.includes(lobbyId)) {
+        toast.info("You are already in this lobby.");
+        return;
+      }
+  
+      await updateDoc(userDocRef, {
+        joinedLobbies: arrayUnion(lobbyId)
+      });
+  
+      setJoinedLobbies([...joinedLobbies, {...lobbyToJoin, id: lobbyId}]);
+      toast.success("Joined the lobby successfully!");
+      closeJoinModal();
+    } catch (error) {
+      toast.error("Error joining lobby: ", error);
+      console.log("Error joining lobby: ", error);
+    }
+  };
+
   return (
     <div className="lobbies-container">
       <div className="lobbies-buttons">
         <button onClick={openCreateModal} className="retro-button">Create Lobby</button>
-        <Link to="/join-lobby" className="retro-button">Join Lobby</Link>
+        <button onClick={openJoinModal} className="retro-button">Join Lobby</button>
         <Link to="/view-characters" className="retro-button">Create Character Sheet</Link>
         <Link to="/create-character" className="retro-button">View Character Sheets</Link>
       </div>
@@ -192,6 +238,18 @@ const Lobbies = () => {
         actionButtonText="Create"
         cancelButtonText="Cancel"
       />
+
+      <Modal
+        show={joinModalVisible}
+        title="Join lobby"
+        handleClose={closeJoinModal}
+        handleAction={joinLobby}
+        textValue={inputLobbyCode}
+        setTextValue={setInputLobbyCode}
+        actionButtonText="Join"
+        cancelButtonText="Cancel"
+      />
+
       <ToastContainer />
     </div>
   );
