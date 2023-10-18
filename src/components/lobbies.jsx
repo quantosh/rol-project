@@ -237,6 +237,7 @@ const Lobbies = () => {
         setTextValue={setLobbyName}
         actionButtonText="Create"
         cancelButtonText="Cancel"
+        placeholder="Name"
       />
 
       <Modal
@@ -248,6 +249,7 @@ const Lobbies = () => {
         setTextValue={setInputLobbyCode}
         actionButtonText="Join"
         cancelButtonText="Cancel"
+        placeholder="Code"
       />
 
       <ToastContainer />

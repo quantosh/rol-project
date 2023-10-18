@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/modal.css';
 
-const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue, actionButtonText, cancelButtonText }) => {
+const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue, actionButtonText, cancelButtonText, placeholder, hideTextBox }) => {
     if (!show){
         return null;
     }
@@ -9,13 +9,15 @@ const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue
     return (
         <div className="card-body">
             <div className="modal-content">
-                <h2>{title}</h2>
-                <input
-                    type="text"
-                    value={textValue}
-                    onChange={(e) => setTextValue(e.target.value)}
-                    placeholder="Name"
-                />
+            <h2>{title}</h2>
+                {!hideTextBox && (
+                    <input
+                        type="text"
+                        value={textValue}
+                        onChange={(e) => setTextValue(e.target.value)}
+                        placeholder={placeholder}
+                    />
+                )}
                 <div className="modal-actions">
                     <button onClick={handleAction}>{actionButtonText}</button>
                     <button onClick={handleClose}>{cancelButtonText}</button>
