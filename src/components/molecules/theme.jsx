@@ -1,19 +1,15 @@
+import { useTheme } from '../../hooks/useTheme'
+
 function Theme () {
+  const { theme, toggleTheme } = useTheme()
+
   return (
     <div className="max-w-fit p-2 ml-1 bg-white border border-gray-200 rounded-lg shadow m-1 text-white">
       <div className="text-base p-1 text-black">
         Theme options
       </div>
       <div className="m-2">
-        <h2 className="mb-2 text-sm text-slate-700 font-bold">Toggle</h2>
-        🌞
-        <div className="inline-block w-10">
-          <span data-toggle-theme="dark" data-act-class="pl-4" className="border rounded-full border-slate-700 flex items-center cursor-pointer w-10 transition-all duration-300 ease-in-out pl-0">
-            <span className="rounded-full w-3 h-3 m-1 bg-slate-700">
-            </span>
-          </span>
-        </div>
-        🌚
+        <button className='btn' onClick={toggleTheme}>{theme === 'light' ? 'dark' : 'light'}</button>
       </div>
 
       <div className="m-2">
