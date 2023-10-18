@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { auth } from '../main'
+import { auth, db } from '../main'
 import { ToastContainer, toast } from 'react-toastify';
 import { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
 import 'react-toastify/dist/ReactToastify.css';
 
 function RegisterUser() {
@@ -13,8 +14,14 @@ function RegisterUser() {
   const handleSubmit = (e) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then(_ => {
-        navigate("/dashboard");
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+
+        await addDoc(collection(db, "users"), {
+          email: user.email
+        });
+
+        navigate("/lobbies");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -50,8 +57,8 @@ function RegisterUser() {
               <label className="label font-press-start text-xs" htmlFor="password">Password</label>
               <input className="input input-bordered w-full max-w-xs" type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
               <div className="flex justify-between">
-                <input className="btn btn-primary mt-2" type="submit" value="Register" />
                 <input type="button" className="btn btn-active btn-accent mt-2" onClick="{goBack}" value="Back" />
+                <input className="btn btn-primary mt-2" type="submit" value="Register" />
               </div>
             </form>
           </div>

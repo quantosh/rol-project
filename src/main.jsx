@@ -2,8 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { getAuth } from 'firebase/auth'
-import './index.css'
 import { initializeApp } from 'firebase/app';
+import { getFirestore } from "firebase/firestore";
+import './index.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDpo3ulkAAeHdBcfniwQ7MR6E9V_mph5z4",
@@ -16,7 +18,10 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 export const auth = getAuth(app);
+export { db };
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

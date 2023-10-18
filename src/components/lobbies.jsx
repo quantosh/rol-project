@@ -1,17 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Modal from './modal';
+import { collection, addDoc, doc, setDoc, onSnapshot } from "firebase/firestore"; 
+import { db } from '../main';
+import { toast, ToastContainer } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
+import { auth } from '../main'
 import '../styles/lobbies.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Lobbies = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [lobbyName, setLobbyName] = useState('');
+  const [joinedLobbies, setJoinedLobbies] = useState([]);
 
-  // Simulated data for joined lobbies - should be state if it will change
-  const [joinedLobbies, setJoinedLobbies] = useState([
-    { id: 1, name: 'Lobby 1' },
-    { id: 2, name: 'Lobby 2' }
-  ]);
+  useEffect(() => {
+    const fetchJoinedLobbies = async () => {
+      const user = auth.currentUser;
+
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const joinedLobbiesCol = collection(userDocRef, "joinedLobbies");
+        
+        const unsubscribe = onSnapshot(joinedLobbiesCol, (snapshot) => {
+          const updatedLobbies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setJoinedLobbies(updatedLobbies);
+        });
+
+        return () => unsubscribe();
+      }
+    };
+
+    fetchJoinedLobbies();
+  }, []);
+
 
   const openModal = () => {
     setModalVisible(true);
@@ -19,13 +41,44 @@ const Lobbies = () => {
 
   const closeModal = () => {
     setModalVisible(false);
-    setLobbyName(''); // Clear the input field on close
+    setLobbyName('');
   };
 
-  const createLobby = () => {
-    // Here, you would typically make a server request to create the lobby.
-    // We'll simulate it by locally adding it to the list.
-    const newLobby = { id: joinedLobbies.length + 1, name: lobbyName };
+  const createLobby = async () => {
+    if (!lobbyName.trim()) {
+      toast.error("Lobby name cannot be empty!");
+      return;
+    }
+
+    const newLobbyId = uuidv4();
+    const newLobbyCode = uuidv4().substring(0, 8);
+
+    const newLobby = {
+      id: newLobbyId,
+      code: newLobbyCode,
+      name: lobbyName.trim()
+    };
+    
+    try {
+      const user = auth.currentUser;
+      
+      if (!user) {
+        toast.error("You must be logged in to create a lobby");
+        throw new Error("User must be logged in to create a lobby");
+      }
+
+      await addDoc(collection(db, "lobbies"), newLobby);
+      const userDocRef = doc(db, "users", user.uid);
+      const lobbyRef = doc(userDocRef, "joinedLobbies", newLobbyId);
+      await setDoc(lobbyRef, newLobby);
+
+      toast.success("Lobby created successfully!");
+      closeModal();
+    } catch (e) {
+      toast.error("Error adding lobby: ", e);
+      console.log("Error adding lobby: ", e);
+    }
+
     setJoinedLobbies([...joinedLobbies, newLobby]);
     closeModal();
   };
@@ -43,13 +96,10 @@ const Lobbies = () => {
       <ul className="lobbies-list">
         {joinedLobbies.map((lobby) => (
           <li key={lobby.id} className="lobbies-item">
-            {lobby.name}
+            <span className="lobby-name">{lobby.name}</span> - <span className="lobby-code">{lobby.code}</span>
           </li>
         ))}
       </ul>
-      {
-      console.log(modalVisible)
-      }
       
       <Modal 
         show={modalVisible}
@@ -61,6 +111,7 @@ const Lobbies = () => {
         actionButtonText="Create"
         cancelButtonText="Cancel"
       />
+      <ToastContainer />
     </div>
   );
 };
