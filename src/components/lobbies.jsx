@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import Modal from '../../molecules/modal/modal'
+import Modal from './modal'
 import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, getDoc, query, getDocs, arrayUnion } from 'firebase/firestore'
-import { db, auth } from '../../../main'
+import { db, auth } from '../main'
 import { toast, ToastContainer } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
+
+import '../styles/lobbies.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 const Lobbies = () => {
@@ -64,11 +66,10 @@ const Lobbies = () => {
         joinedLobbies: arrayRemove(lobby.id)
       })
 
-      const lobbyRef = doc(db, 'lobbies', lobby.id)
-
       if (user && lobby.creator === user.email) {
-        batch.delete(lobbyRef)
         const batch = writeBatch(db)
+        const lobbyRef = doc(db, 'lobbies', lobby.id)
+        batch.delete(lobbyRef)
 
         // TODO: This will be bad for performance if there are many users (thousands, so we are good for now)
         const allUsersSnapshot = await getDocs(collection(db, 'users'))
@@ -83,11 +84,6 @@ const Lobbies = () => {
         await batch.commit()
         toast.success('Lobby deleted successfully!')
       } else {
-        const userDocRef = await getCurrentUserDocRef();
-        await updateDoc(lobbyRef, {
-          joinedUsers: arrayRemove(userDocRef.id),
-        });
-
         toast.success('Lobby left successfully!')
       }
     } catch (error) {
@@ -149,17 +145,12 @@ const Lobbies = () => {
         creator: user.email
       }
 
-      const userDocRef = await getCurrentUserDocRef();
-      const lobbyDocRef = await addDoc(collection(db, 'lobbies'), newLobby)
+      const docRef = await addDoc(collection(db, 'lobbies'), newLobby)
       await updateDoc(await getCurrentUserDocRef(), {
-        joinedLobbies: arrayUnion(lobbyDocRef.id)
-      })
-
-      await updateDoc(lobbyDocRef, {
-        joinedUsers: arrayUnion(userDocRef.id)
+        joinedLobbies: arrayUnion(docRef.id)
       });
 
-      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: lobbyDocRef.id }])
+      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: docRef.id }])
       toast.success('Lobby created successfully!')
       closeCreateModal()
     } catch (e) {
@@ -194,11 +185,6 @@ const Lobbies = () => {
         joinedLobbies: arrayUnion(lobbyId)
       })
 
-      const lobbyDocRef = doc(db, 'lobbies', lobbyId);
-      await updateDoc(lobbyDocRef, {
-        joinedUsers: arrayUnion(userDocRef.id)
-      });
-
       setJoinedLobbies([...joinedLobbies, { ...lobbyToJoin, id: lobbyId }])
       toast.success('Joined the lobby successfully!')
       closeJoinModal()
@@ -209,42 +195,37 @@ const Lobbies = () => {
   }
 
   return (
-    <div className="card-body">
-      <div className="flex lobbies-buttons gap-1">
-        <button onClick={openCreateModal} className="btn btn-primary">Create Lobby</button>
-        <button onClick={openJoinModal} className="btn btn-secondary">Join Lobby</button>
-        <div className="lg:tooltip tooltip-error" data-tip="Not defined">
-          <Link to="" className="btn ">Create Character Sheet</Link>
-        </div>
-        <div className="lg:tooltip tooltip-error" data-tip="Not defined">
-          <Link to="" className="btn">View Character Sheets</Link>
-        </div>
+    <div className="lobbies-container">
+      <div className="lobbies-buttons">
+        <button onClick={openCreateModal} className="retro-button">Create Lobby</button>
+        <button onClick={openJoinModal} className="retro-button">Join Lobby</button>
+        <Link to="/view-characters" className="retro-button">Create Character Sheet</Link>
+        <Link to="/create-character" className="retro-button">View Character Sheets</Link>
       </div>
-      <h2 className="card-title">Your lobbies:</h2>
-      <div className="overflow-x-auto">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Code</th>
-              <th></th>
+
+      <h2 className="lobbies-list-header">Your lobbies:</h2>
+      <table className="lobbies-list">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {joinedLobbies.map((lobby, index) => (
+            <tr key={lobby.id || index}>
+              <td>{lobby.name}</td>
+              <td>{lobby.code}</td>
+              <td>
+                <button onClick={() => deleteLobby(lobby)}>
+                  🗑️
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {joinedLobbies.map((lobby, index) => (
-              <tr key={lobby.id || index} className='hover:bg-gray-100'>
-                <td>{lobby.name}</td>
-                <td>{lobby.code}</td>
-                <td>
-                  <button onClick={() => deleteLobby(lobby)}>
-                    🗑️
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
 
       <Modal
         show={createModalVisible}
