@@ -22,7 +22,7 @@ function UserBubble () {
           </a>
         </li>
         <li><a>Settings</a></li>
-        <li><a onClick={handleLogoutClick}>Logout</a></li>
+        <li><a onClick={handleLogoutClick} className="hover:bg-warning">Logout</a></li>
       </ul>
     </div>
   )
