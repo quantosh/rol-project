@@ -229,7 +229,7 @@ const Lobbies = () => {
           placeholder="Name"
         />
         <Modal
-          buttonTextContent="Create Lobby"
+          buttonTextContent="Join lobby"
           buttonStyle="btn-secondary"
           title="Join lobby"
           handleClose={closeJoinModal}
@@ -240,7 +240,6 @@ const Lobbies = () => {
           cancelButtonText="Cancel"
           placeholder="Code"
         />
-        <button onClick={openJoinModal} className="btn btn-secondary">Join Lobby</button>
         <div className="lg:tooltip tooltip-error" data-tip="Not defined">
           <Link to="" className="btn">View Character Sheets</Link>
         </div>
