@@ -1,25 +1,24 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Modal from '../../molecules/modal/modal'
 import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, getDoc, query, getDocs, arrayUnion } from 'firebase/firestore'
 import { db, auth } from '../../../main'
 import { toast, ToastContainer } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
-import { useNavigate } from 'react-router-dom';
+
 import 'react-toastify/dist/ReactToastify.css'
 
 const Lobbies = () => {
-  const [joinModalVisible, setJoinModalVisible] = useState(false)
+  const [, setJoinModalVisible] = useState(false)
   const [inputLobbyCode, setInputLobbyCode] = useState('')
-  const [createModalVisible, setCreateModalVisible] = useState(false)
+  const [, setCreateModalVisible] = useState(false)
   const [lobbyName, setLobbyName] = useState('')
   const [joinedLobbies, setJoinedLobbies] = useState([])
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const navigateToLobby = (lobbyId) => {
-    navigate(`/lobby/${lobbyId}`);
-  };
-
+    navigate(`/lobby/${lobbyId}`)
+  }
 
   const fetchLobbiesByIds = async (lobbyIds) => {
     try {
@@ -117,10 +116,6 @@ const Lobbies = () => {
     const usersCollection = collection(db, 'users')
     const q = query(usersCollection, where('email', '==', userEmail))
     return (await getDocs(q)).docs[0].ref
-  }
-
-  const openCreateModal = () => {
-    setCreateModalVisible(true)
   }
 
   const closeCreateModal = () => {
@@ -222,7 +217,29 @@ const Lobbies = () => {
   return (
     <div className="card-body">
       <div className="flex lobbies-buttons gap-1">
-        <button onClick={openCreateModal} className="btn btn-primary">Create Lobby</button>
+        <Modal
+          title="Create a Lobby"
+          buttonTextContent="Create Lobby"
+          handleClose={closeCreateModal}
+          handleAction={createLobby}
+          textValue={lobbyName}
+          setTextValue={setLobbyName}
+          actionButtonText="Create"
+          cancelButtonText="Cancel"
+          placeholder="Name"
+        />
+        <Modal
+          buttonTextContent="Create Lobby"
+          buttonStyle="btn-secondary"
+          title="Join lobby"
+          handleClose={closeJoinModal}
+          handleAction={joinLobby}
+          textValue={inputLobbyCode}
+          setTextValue={setInputLobbyCode}
+          actionButtonText="Join"
+          cancelButtonText="Cancel"
+          placeholder="Code"
+        />
         <button onClick={openJoinModal} className="btn btn-secondary">Join Lobby</button>
         <div className="lg:tooltip tooltip-error" data-tip="Not defined">
           <Link to="" className="btn">View Character Sheets</Link>
@@ -255,31 +272,6 @@ const Lobbies = () => {
           </tbody>
         </table>
       </div>
-
-      <Modal
-        show={createModalVisible}
-        title="Create a Lobby"
-        handleClose={closeCreateModal}
-        handleAction={createLobby}
-        textValue={lobbyName}
-        setTextValue={setLobbyName}
-        actionButtonText="Create"
-        cancelButtonText="Cancel"
-        placeholder="Name"
-      />
-
-      <Modal
-        show={joinModalVisible}
-        title="Join lobby"
-        handleClose={closeJoinModal}
-        handleAction={joinLobby}
-        textValue={inputLobbyCode}
-        setTextValue={setInputLobbyCode}
-        actionButtonText="Join"
-        cancelButtonText="Cancel"
-        placeholder="Code"
-      />
-
       <ToastContainer />
     </div>
   )
