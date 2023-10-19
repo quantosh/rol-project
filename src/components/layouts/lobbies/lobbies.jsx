@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Modal from '../../molecules/modal/modal'
 import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, getDoc, query, getDocs, arrayUnion } from 'firebase/firestore'
 import { db, auth } from '../../../main'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 
 import 'react-toastify/dist/ReactToastify.css'
@@ -272,7 +272,6 @@ const Lobbies = () => {
           </tbody>
         </table>
       </div>
-      <ToastContainer />
     </div>
   )
 }

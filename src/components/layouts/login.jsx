@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { auth } from '../../main'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import 'react-toastify/dist/ReactToastify.css'
@@ -71,7 +71,6 @@ function Login () {
             </div>
           </div>
         </div>
-        <ToastContainer />
       </div>
     </section>
   )

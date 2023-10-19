@@ -1,14 +1,11 @@
 import Login from '../layouts/login'
-import HandleDarkTheme from '../atoms/nav/handleDarkTheme'
+import AuthLayout from '../layouts/authLayout'
 
 function LoginPage () {
   return (
-    <div className="primary-content">
-      <div className="fixed navbar bg-base-100">
-        <HandleDarkTheme />
-      </div>
+    <AuthLayout>
       <Login />
-    </div>
+    </AuthLayout>
   )
 }
 
