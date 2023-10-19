@@ -19,5 +19,7 @@ module.exports = {
     ],
     "react/prop-types": "off",
     "react/no-unescaped-entities": "off",
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "react/jsx-indent": ["error", 2],
   },
 }

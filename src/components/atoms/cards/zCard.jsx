@@ -1,5 +1,4 @@
-function ZCard() {
-
+function ZCard () {
   return (
     <div className="flex">
       <div className="block">

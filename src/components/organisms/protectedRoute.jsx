@@ -1,4 +1,4 @@
-import { auth } from '../main'
+import { auth } from '../../main'
 import { Navigate } from 'react-router-dom'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
@@ -7,8 +7,10 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="loading-component">
-        <p>Loading...</p>
+      <div className="w-full h-[100vh] flex align-center justify-center items-center">
+        <div className="loading-component">
+          <span className="loading loading-spinner text-primary"></span>
+        </div>
       </div>
     )
   }

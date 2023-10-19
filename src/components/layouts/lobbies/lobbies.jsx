@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import Modal from './modal'
+import { Link, useNavigate } from 'react-router-dom'
+import Modal from '../../molecules/modal/modal'
 import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, getDoc, query, getDocs, arrayUnion } from 'firebase/firestore'
-import { db, auth } from '../main'
-import { toast, ToastContainer } from 'react-toastify'
+import { db, auth } from '../../../main'
+import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 
-import '../styles/lobbies.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 const Lobbies = () => {
-  const [joinModalVisible, setJoinModalVisible] = useState(false)
+  const [, setJoinModalVisible] = useState(false)
   const [inputLobbyCode, setInputLobbyCode] = useState('')
-  const [createModalVisible, setCreateModalVisible] = useState(false)
+  const [, setCreateModalVisible] = useState(false)
   const [lobbyName, setLobbyName] = useState('')
   const [joinedLobbies, setJoinedLobbies] = useState([])
+  const navigate = useNavigate()
+
+  const navigateToLobby = (lobbyId) => {
+    navigate(`/lobby/${lobbyId}`)
+  }
 
   const fetchLobbiesByIds = async (lobbyIds) => {
     try {
@@ -42,8 +46,8 @@ const Lobbies = () => {
         const user = auth.currentUser
         if (user) {
           const userDocData = (await getCurrentUserDoc()).data()
-          const userLobbiesIds = userDocData.joinedLobbies || []
-          const userLobbies = await fetchLobbiesByIds(userLobbiesIds)
+          const userLobbiesData = userDocData.joinedLobbies || []
+          const userLobbies = await fetchLobbiesByIds(userLobbiesData.map(lobbyData => lobbyData.lobbyId))
           setJoinedLobbies(userLobbies)
         }
       } catch (error) {
@@ -63,27 +67,34 @@ const Lobbies = () => {
       const userDocRef = await getCurrentUserDocRef()
 
       await updateDoc(userDocRef, {
-        joinedLobbies: arrayRemove(lobby.id)
+        joinedLobbies: arrayRemove({ lobbyId: lobby.id, sheetId: lobby.sheetId || '' })
       })
+
+      const lobbyRef = doc(db, 'lobbies', lobby.id)
 
       if (user && lobby.creator === user.email) {
         const batch = writeBatch(db)
-        const lobbyRef = doc(db, 'lobbies', lobby.id)
         batch.delete(lobbyRef)
 
         // TODO: This will be bad for performance if there are many users (thousands, so we are good for now)
         const allUsersSnapshot = await getDocs(collection(db, 'users'))
         allUsersSnapshot.forEach(async (userDoc) => {
-          const joinedLobbiesRef = doc(db, 'users', userDoc.id, 'joinedLobbies', lobby.id)
-          const joinedLobbySnapshot = await getDoc(joinedLobbiesRef)
-          if (joinedLobbySnapshot.exists()) {
-            batch.delete(joinedLobbiesRef)
+          if (userDoc.data().joinedLobbies) {
+            const lobbyIndex = userDoc.data().joinedLobbies.findIndex(l => l.lobbyId === lobby.id)
+            if (lobbyIndex !== -1) {
+              const updatedLobbies = userDoc.data().joinedLobbies.filter((l, index) => index !== lobbyIndex)
+              batch.update(doc(db, 'users', userDoc.id), { joinedLobbies: updatedLobbies })
+            }
           }
         })
 
         await batch.commit()
         toast.success('Lobby deleted successfully!')
       } else {
+        await updateDoc(lobbyRef, {
+          joinedUsers: arrayRemove(userDocRef.id)
+        })
+
         toast.success('Lobby left successfully!')
       }
     } catch (error) {
@@ -105,10 +116,6 @@ const Lobbies = () => {
     const usersCollection = collection(db, 'users')
     const q = query(usersCollection, where('email', '==', userEmail))
     return (await getDocs(q)).docs[0].ref
-  }
-
-  const openCreateModal = () => {
-    setCreateModalVisible(true)
   }
 
   const closeCreateModal = () => {
@@ -142,15 +149,23 @@ const Lobbies = () => {
       const newLobby = {
         code: uuidv4().substring(0, 8),
         name: lobbyName.trim(),
-        creator: user.email
+        creator: user.email,
+        type: 'custom'
       }
 
-      const docRef = await addDoc(collection(db, 'lobbies'), newLobby)
-      await updateDoc(await getCurrentUserDocRef(), {
-        joinedLobbies: arrayUnion(docRef.id)
+      const userDocRef = await getCurrentUserDocRef()
+      const lobbyDocRef = await addDoc(collection(db, 'lobbies'), newLobby)
+      const newLobbyEntry = { lobbyId: lobbyDocRef.id, sheetId: '' }
+
+      await updateDoc(userDocRef, {
+        joinedLobbies: arrayUnion(newLobbyEntry)
       })
 
-      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: docRef.id }])
+      await updateDoc(lobbyDocRef, {
+        joinedUsers: arrayUnion(userDocRef.id)
+      })
+
+      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: lobbyDocRef.id }])
       toast.success('Lobby created successfully!')
       closeCreateModal()
     } catch (e) {
@@ -170,7 +185,7 @@ const Lobbies = () => {
       }
 
       const lobbyToJoin = querySnapshot.docs[0].data()
-      const lobbyId = querySnapshot.docs[0].id // Capture the document ID
+      const lobbyId = querySnapshot.docs[0].id
 
       const userDocRef = await getCurrentUserDocRef()
       const userDoc = await getDoc(userDocRef)
@@ -182,7 +197,12 @@ const Lobbies = () => {
       }
 
       await updateDoc(userDocRef, {
-        joinedLobbies: arrayUnion(lobbyId)
+        joinedLobbies: arrayUnion({ lobbyId, sheetId: '' })
+      })
+
+      const lobbyDocRef = doc(db, 'lobbies', lobbyId)
+      await updateDoc(lobbyDocRef, {
+        joinedUsers: arrayUnion(userDocRef.id)
       })
 
       setJoinedLobbies([...joinedLobbies, { ...lobbyToJoin, id: lobbyId }])
@@ -195,63 +215,63 @@ const Lobbies = () => {
   }
 
   return (
-    <div className="lobbies-container">
-      <div className="lobbies-buttons">
-        <button onClick={openCreateModal} className="retro-button">Create Lobby</button>
-        <button onClick={openJoinModal} className="retro-button">Join Lobby</button>
-        <Link to="/view-characters" className="retro-button">Create Character Sheet</Link>
-        <Link to="/create-character" className="retro-button">View Character Sheets</Link>
+    <div className="card-body">
+      <div className="flex lobbies-buttons gap-1">
+        <Modal
+          title="Create a Lobby"
+          buttonTextContent="Create Lobby"
+          handleClose={closeCreateModal}
+          handleAction={createLobby}
+          textValue={lobbyName}
+          setTextValue={setLobbyName}
+          actionButtonText="Create"
+          cancelButtonText="Cancel"
+          placeholder="Name"
+        />
+        <Modal
+          buttonTextContent="Create Lobby"
+          buttonStyle="btn-secondary"
+          title="Join lobby"
+          handleClose={closeJoinModal}
+          handleAction={joinLobby}
+          textValue={inputLobbyCode}
+          setTextValue={setInputLobbyCode}
+          actionButtonText="Join"
+          cancelButtonText="Cancel"
+          placeholder="Code"
+        />
+        <button onClick={openJoinModal} className="btn btn-secondary">Join Lobby</button>
+        <div className="lg:tooltip tooltip-error" data-tip="Not defined">
+          <Link to="" className="btn">View Character Sheets</Link>
+        </div>
       </div>
-
-      <h2 className="lobbies-list-header">Your lobbies:</h2>
-      <table className="lobbies-list">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Code</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {joinedLobbies.map((lobby, index) => (
-            <tr key={lobby.id || index}>
-              <td>{lobby.name}</td>
-              <td>{lobby.code}</td>
-              <td>
-                <button onClick={() => deleteLobby(lobby)}>
-                  🗑️
-                </button>
-              </td>
+      <h2 className="card-title">Your lobbies:</h2>
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Code</th>
+              <th>Players</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <Modal
-        show={createModalVisible}
-        title="Create a Lobby"
-        handleClose={closeCreateModal}
-        handleAction={createLobby}
-        textValue={lobbyName}
-        setTextValue={setLobbyName}
-        actionButtonText="Create"
-        cancelButtonText="Cancel"
-        placeholder="Name"
-      />
-
-      <Modal
-        show={joinModalVisible}
-        title="Join lobby"
-        handleClose={closeJoinModal}
-        handleAction={joinLobby}
-        textValue={inputLobbyCode}
-        setTextValue={setInputLobbyCode}
-        actionButtonText="Join"
-        cancelButtonText="Cancel"
-        placeholder="Code"
-      />
-
-      <ToastContainer />
+          </thead>
+          <tbody>
+            {joinedLobbies.map((lobby, index) => (
+              <tr key={lobby.id || index} className='hover:bg-gray-100' style={{ cursor: 'pointer' }} onClick={() => navigateToLobby(lobby.id)}>
+                <td>{lobby.name}</td>
+                <td>{lobby.code}</td>
+                <td>{lobby.joinedUsers?.length}</td>
+                <td>
+                  <button onClick={() => deleteLobby(lobby)}>
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
