@@ -37,20 +37,20 @@ const Lobbies = () => {
   useEffect(() => {
     const fetchJoinedLobbies = async () => {
       try {
-        const user = auth.currentUser;
+        const user = auth.currentUser
         if (user) {
-          const userDocData = (await getCurrentUserDoc()).data();
-          const userLobbiesData = userDocData.joinedLobbies || [];
-          const userLobbies = await fetchLobbiesByIds(userLobbiesData.map(lobbyData => lobbyData.lobbyId));
-          setJoinedLobbies(userLobbies);
+          const userDocData = (await getCurrentUserDoc()).data()
+          const userLobbiesData = userDocData.joinedLobbies || []
+          const userLobbies = await fetchLobbiesByIds(userLobbiesData.map(lobbyData => lobbyData.lobbyId))
+          setJoinedLobbies(userLobbies)
         }
       } catch (error) {
-        console.error('Error fetching lobbies: ', error);
+        console.error('Error fetching lobbies: ', error)
       }
-    };
+    }
 
-    fetchJoinedLobbies();
-  }, []);
+    fetchJoinedLobbies()
+  }, [])
 
   const deleteLobby = async (lobby) => {
     if (!window.confirm('Are you sure you want to leave this lobby?')) return
@@ -74,10 +74,10 @@ const Lobbies = () => {
         const allUsersSnapshot = await getDocs(collection(db, 'users'))
         allUsersSnapshot.forEach(async (userDoc) => {
           if (userDoc.data().joinedLobbies) {
-            const lobbyIndex = userDoc.data().joinedLobbies.findIndex(l => l.lobbyId === lobby.id);
+            const lobbyIndex = userDoc.data().joinedLobbies.findIndex(l => l.lobbyId === lobby.id)
             if (lobbyIndex !== -1) {
-              const updatedLobbies = userDoc.data().joinedLobbies.filter((l, index) => index !== lobbyIndex);
-              batch.update(doc(db, 'users', userDoc.id), { joinedLobbies: updatedLobbies });
+              const updatedLobbies = userDoc.data().joinedLobbies.filter((l, index) => index !== lobbyIndex)
+              batch.update(doc(db, 'users', userDoc.id), { joinedLobbies: updatedLobbies })
             }
           }
         })
@@ -86,8 +86,8 @@ const Lobbies = () => {
         toast.success('Lobby deleted successfully!')
       } else {
         await updateDoc(lobbyRef, {
-          joinedUsers: arrayRemove(userDocRef.id),
-        });
+          joinedUsers: arrayRemove(userDocRef.id)
+        })
 
         toast.success('Lobby left successfully!')
       }
@@ -151,19 +151,19 @@ const Lobbies = () => {
         type: 'custom'
       }
 
-      const userDocRef = await getCurrentUserDocRef();
+      const userDocRef = await getCurrentUserDocRef()
       const lobbyDocRef = await addDoc(collection(db, 'lobbies'), newLobby)
-      const newLobbyEntry = { lobbyId: lobbyDocRef.id, sheetId: '' };
+      const newLobbyEntry = { lobbyId: lobbyDocRef.id, sheetId: '' }
 
       await updateDoc(userDocRef, {
         joinedLobbies: arrayUnion(newLobbyEntry)
-      });
+      })
 
       await updateDoc(lobbyDocRef, {
         joinedUsers: arrayUnion(userDocRef.id)
-      });
+      })
 
-      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: lobbyDocRef.id }]);
+      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: lobbyDocRef.id }])
       toast.success('Lobby created successfully!')
       closeCreateModal()
     } catch (e) {
@@ -195,13 +195,13 @@ const Lobbies = () => {
       }
 
       await updateDoc(userDocRef, {
-        joinedLobbies: arrayUnion({lobbyId: lobbyId, sheetId: ''})
+        joinedLobbies: arrayUnion({ lobbyId, sheetId: '' })
       })
 
-      const lobbyDocRef = doc(db, 'lobbies', lobbyId);
+      const lobbyDocRef = doc(db, 'lobbies', lobbyId)
       await updateDoc(lobbyDocRef, {
         joinedUsers: arrayUnion(userDocRef.id)
-      });
+      })
 
       setJoinedLobbies([...joinedLobbies, { ...lobbyToJoin, id: lobbyId }])
       toast.success('Joined the lobby successfully!')
@@ -228,6 +228,7 @@ const Lobbies = () => {
             <tr>
               <th>Name</th>
               <th>Code</th>
+              <th>Players</th>
               <th></th>
             </tr>
           </thead>
@@ -236,6 +237,7 @@ const Lobbies = () => {
               <tr key={lobby.id || index} className='hover:bg-gray-100'>
                 <td>{lobby.name}</td>
                 <td>{lobby.code}</td>
+                <td>{lobby.joinedUsers.length}</td>
                 <td>
                   <button onClick={() => deleteLobby(lobby)}>
                     🗑️
