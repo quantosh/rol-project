@@ -216,7 +216,7 @@ const Lobbies = () => {
           </thead>
           <tbody>
             {joinedLobbies.map((lobby, index) => (
-              <tr key={lobby.id || index}>
+              <tr key={lobby.id || index} className='hover:bg-gray-100'>
                 <td>{lobby.name}</td>
                 <td>{lobby.code}</td>
                 <td>
