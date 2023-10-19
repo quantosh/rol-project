@@ -5,6 +5,7 @@ import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, get
 import { db, auth } from '../../../main'
 import { toast, ToastContainer } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css'
 
 const Lobbies = () => {
@@ -13,6 +14,12 @@ const Lobbies = () => {
   const [createModalVisible, setCreateModalVisible] = useState(false)
   const [lobbyName, setLobbyName] = useState('')
   const [joinedLobbies, setJoinedLobbies] = useState([])
+  const navigate = useNavigate();
+
+  const navigateToLobby = (lobbyId) => {
+    navigate(`/lobby/${lobbyId}`);
+  };
+
 
   const fetchLobbiesByIds = async (lobbyIds) => {
     try {
@@ -234,7 +241,7 @@ const Lobbies = () => {
           </thead>
           <tbody>
             {joinedLobbies.map((lobby, index) => (
-              <tr key={lobby.id || index} className='hover:bg-gray-100'>
+              <tr key={lobby.id || index} className='hover:bg-gray-100' style={{ cursor: 'pointer' }} onClick={() => navigateToLobby(lobby.id)}>
                 <td>{lobby.name}</td>
                 <td>{lobby.code}</td>
                 <td>{lobby.joinedUsers?.length}</td>
