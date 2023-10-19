@@ -37,20 +37,20 @@ const Lobbies = () => {
   useEffect(() => {
     const fetchJoinedLobbies = async () => {
       try {
-        const user = auth.currentUser
+        const user = auth.currentUser;
         if (user) {
-          const userDocData = (await getCurrentUserDoc()).data()
-          const userLobbiesIds = userDocData.joinedLobbies || []
-          const userLobbies = await fetchLobbiesByIds(userLobbiesIds)
-          setJoinedLobbies(userLobbies)
+          const userDocData = (await getCurrentUserDoc()).data();
+          const userLobbiesData = userDocData.joinedLobbies || [];
+          const userLobbies = await fetchLobbiesByIds(userLobbiesData.map(lobbyData => lobbyData.lobbyId));
+          setJoinedLobbies(userLobbies);
         }
       } catch (error) {
-        console.error('Error fetching lobbies: ', error)
+        console.error('Error fetching lobbies: ', error);
       }
-    }
+    };
 
-    fetchJoinedLobbies()
-  }, [])
+    fetchJoinedLobbies();
+  }, []);
 
   const deleteLobby = async (lobby) => {
     if (!window.confirm('Are you sure you want to leave this lobby?')) return
@@ -61,29 +61,30 @@ const Lobbies = () => {
       const userDocRef = await getCurrentUserDocRef()
 
       await updateDoc(userDocRef, {
-        joinedLobbies: arrayRemove(lobby.id)
+        joinedLobbies: arrayRemove({ lobbyId: lobby.id, sheetId: lobby.sheetId || '' })
       })
 
       const lobbyRef = doc(db, 'lobbies', lobby.id)
 
       if (user && lobby.creator === user.email) {
-        batch.delete(lobbyRef)
         const batch = writeBatch(db)
+        batch.delete(lobbyRef)
 
         // TODO: This will be bad for performance if there are many users (thousands, so we are good for now)
         const allUsersSnapshot = await getDocs(collection(db, 'users'))
         allUsersSnapshot.forEach(async (userDoc) => {
-          const joinedLobbiesRef = doc(db, 'users', userDoc.id, 'joinedLobbies', lobby.id)
-          const joinedLobbySnapshot = await getDoc(joinedLobbiesRef)
-          if (joinedLobbySnapshot.exists()) {
-            batch.delete(joinedLobbiesRef)
+          if (userDoc.data().joinedLobbies) {
+            const lobbyIndex = userDoc.data().joinedLobbies.findIndex(l => l.lobbyId === lobby.id);
+            if (lobbyIndex !== -1) {
+              const updatedLobbies = userDoc.data().joinedLobbies.filter((l, index) => index !== lobbyIndex);
+              batch.update(doc(db, 'users', userDoc.id), { joinedLobbies: updatedLobbies });
+            }
           }
         })
 
         await batch.commit()
         toast.success('Lobby deleted successfully!')
       } else {
-        const userDocRef = await getCurrentUserDocRef();
         await updateDoc(lobbyRef, {
           joinedUsers: arrayRemove(userDocRef.id),
         });
@@ -152,15 +153,17 @@ const Lobbies = () => {
 
       const userDocRef = await getCurrentUserDocRef();
       const lobbyDocRef = await addDoc(collection(db, 'lobbies'), newLobby)
-      await updateDoc(await getCurrentUserDocRef(), {
-        joinedLobbies: arrayUnion(lobbyDocRef.id)
-      })
+      const newLobbyEntry = { lobbyId: lobbyDocRef.id, sheetId: '' };
+
+      await updateDoc(userDocRef, {
+        joinedLobbies: arrayUnion(newLobbyEntry)
+      });
 
       await updateDoc(lobbyDocRef, {
         joinedUsers: arrayUnion(userDocRef.id)
       });
 
-      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: lobbyDocRef.id }])
+      setJoinedLobbies([...joinedLobbies, { ...newLobby, id: lobbyDocRef.id }]);
       toast.success('Lobby created successfully!')
       closeCreateModal()
     } catch (e) {
@@ -192,7 +195,7 @@ const Lobbies = () => {
       }
 
       await updateDoc(userDocRef, {
-        joinedLobbies: arrayUnion(lobbyId)
+        joinedLobbies: arrayUnion({lobbyId: lobbyId, sheetId: ''})
       })
 
       const lobbyDocRef = doc(db, 'lobbies', lobbyId);
@@ -214,9 +217,6 @@ const Lobbies = () => {
       <div className="flex lobbies-buttons gap-1">
         <button onClick={openCreateModal} className="btn btn-primary">Create Lobby</button>
         <button onClick={openJoinModal} className="btn btn-secondary">Join Lobby</button>
-        <div className="lg:tooltip tooltip-error" data-tip="Not defined">
-          <Link to="" className="btn ">Create Character Sheet</Link>
-        </div>
         <div className="lg:tooltip tooltip-error" data-tip="Not defined">
           <Link to="" className="btn">View Character Sheets</Link>
         </div>
