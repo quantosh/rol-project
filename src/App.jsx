@@ -3,6 +3,7 @@ import LoginPage from './components/pages/loginPage'
 import Dashboard from './components/layouts/allComponents'
 import RegisterUser from './components/layouts/registerUser'
 import LobbiesPage from './components/pages/lobbiesPage'
+import LobbyPage from './components/pages/lobbyPage'
 import ProtectedRoute from './components/organisms/protectedRoute'
 import User from './components/atoms/user'
 
@@ -15,6 +16,7 @@ function App () {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/register" element={<RegisterUser />} />
           <Route path="/lobbies" element={<ProtectedRoute><LobbiesPage /></ProtectedRoute>} />
+          <Route path="/lobby/:id" element={<ProtectedRoute><LobbyPage /></ProtectedRoute>} />
           <Route path="/user" element={<User />} />
         </Routes>
       </Router>
