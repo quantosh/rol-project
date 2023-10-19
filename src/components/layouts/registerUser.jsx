@@ -53,11 +53,11 @@ function RegisterUser () {
         </div>
         <div className="card shadow-xl bg-slate-100">
           <div className="card-body">
-            <h2 className="card-title font-press-start ">Register</h2>
+            <h2 className="card-title ">Register</h2>
             <form onSubmit={handleSubmit}>
-              <label className="label font-press-start text-xs" htmlFor="email">Email</label>
+              <label className="label text-xs" htmlFor="email">Email</label>
               <input className="input input-bordered w-full max-w-xs" type="email" id="email" name="email" onChange={(e) => setEmail(e.target.value)} required />
-              <label className="label font-press-start text-xs" htmlFor="password">Password</label>
+              <label className="label text-xs" htmlFor="password">Password</label>
               <input className="input input-bordered w-full max-w-xs" type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
               <div className="flex justify-between">
                 <input type="button" className="btn btn-active btn-accent mt-2" onClick="{goBack}" value="Back" />
@@ -67,12 +67,6 @@ function RegisterUser () {
           </div>
         </div>
         <ToastContainer />
-        <div className="flex items-center justify-center mt-2 gap-4">
-          <a href="http://">q</a>
-          <a href="http://">q</a>
-          <a href="http://">q</a>
-          <a href="http://">q</a>
-        </div>
       </div>
     </section>
   )

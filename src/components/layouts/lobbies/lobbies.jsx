@@ -5,8 +5,6 @@ import { collection, addDoc, doc, updateDoc, writeBatch, arrayRemove, where, get
 import { db, auth } from '../../../main'
 import { toast, ToastContainer } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
-
-import styles from './styles.module.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 const Lobbies = () => {
@@ -195,37 +193,42 @@ const Lobbies = () => {
   }
 
   return (
-    <div className="lobbies-container">
-      <div className="lobbies-buttons">
-        <button onClick={openCreateModal} className={styles['retro-button']}>Create Lobby</button>
-        <button onClick={openJoinModal} className={styles['retro-button']}>Join Lobby</button>
-        <Link to="/view-characters" className={styles['retro-button']}>Create Character Sheet</Link>
-        <Link to="/create-character" className={styles['retro-button']}>View Character Sheets</Link>
+    <div className="card-body">
+      <div className="flex lobbies-buttons gap-1">
+        <button onClick={openCreateModal} className="btn btn-primary">Create Lobby</button>
+        <button onClick={openJoinModal} className="btn btn-secondary">Join Lobby</button>
+        <div className="lg:tooltip tooltip-error" data-tip="Not defined">
+          <Link to="" className="btn ">Create Character Sheet</Link>
+        </div>
+        <div className="lg:tooltip tooltip-error" data-tip="Not defined">
+          <Link to="" className="btn">View Character Sheets</Link>
+        </div>
       </div>
-
-      <h2 className={styles['lobbies-list-header']}>Your lobbies:</h2>
-      <table className={styles['lobbies-list']}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Code</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {joinedLobbies.map((lobby, index) => (
-            <tr key={lobby.id || index}>
-              <td>{lobby.name}</td>
-              <td>{lobby.code}</td>
-              <td>
-                <button onClick={() => deleteLobby(lobby)}>
-                  🗑️
-                </button>
-              </td>
+      <h2 className="card-title">Your lobbies:</h2>
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Code</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {joinedLobbies.map((lobby, index) => (
+              <tr key={lobby.id || index}>
+                <td>{lobby.name}</td>
+                <td>{lobby.code}</td>
+                <td>
+                  <button onClick={() => deleteLobby(lobby)}>
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <Modal
         show={createModalVisible}

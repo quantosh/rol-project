@@ -39,33 +39,29 @@ function Login () {
   }
 
   return (
-    <section className="bg-blueGray-50">
+    <section className="">
       <div className="flex flex-col justify-center items-center h-[100vh]">
         <div className="flex items-center justify-center mb-2">
           <img src="src\assets\rl-temp-white.png" width="240px" alt="" />
         </div>
-        <div className="card shadow-xl bg-slate-100">
-          <div className="card-body">
-            <h2 className="card-title font-press-start ">Login</h2>
-            <form onSubmit={handleSubmit}>
-              <label className="label font-press-start text-xs" htmlFor="email">Email</label>
-              <input className="input input-bordered w-full max-w-xs" htmlFor="grid-password" type="text" id="email" name="email" onChange={(e) => setEmail(e.target.value)} required />
-              <label className="label font-press-start text-xs" htmlFor="password">Password</label>
-              <input className="input input-bordered w-full max-w-xs" type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
-              <div className="flex justify-between">
-                <input type="submit" className="btn btn-primary mt-2" value="Login" />
-                <button className="btn mt-2" onClick={handleRegisterButtonClick}>Register</button>
-              </div>
-            </form>
+        <div className="flex">
+          <div className="card shadow-xl ">
+            <div className="card-body">
+              <h2 className="card-title ">Login</h2>
+              <form onSubmit={handleSubmit}>
+                <label className="label text-sm" htmlFor="email">Email</label>
+                <input className="input input-bordered w-full max-w-xs" htmlFor="grid-password" type="text" id="email" name="email" onChange={(e) => setEmail(e.target.value)} required />
+                <label className="label text-sm" htmlFor="password">Password</label>
+                <input className="input input-bordered w-full max-w-xs" type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
+                <div className="flex justify-between mt-2">
+                  <input type="submit" className="btn btn-primary" value="Login" />
+                  <button className="btn btn-secondary" onClick={handleRegisterButtonClick}>Register</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
         <ToastContainer />
-        <div className="flex items-center justify-center mt-2 gap-4">
-          <a href="http://">q</a>
-          <a href="http://">q</a>
-          <a href="http://">q</a>
-          <a href="http://">q</a>
-        </div>
       </div>
     </section>
   )

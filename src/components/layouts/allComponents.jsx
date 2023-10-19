@@ -8,7 +8,7 @@ import CharacterCard from '../atoms/characters/characterCard'
 import ZCard from '../atoms/cards/zCard'
 import HCard from '../atoms/cards/hCard'
 
-function Dashboard () {
+function allComponents () {
   return (
     <div className="q">
       <div className="flex">
@@ -37,4 +37,4 @@ function Dashboard () {
   )
 }
 
-export default Dashboard
+export default allComponents

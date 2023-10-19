@@ -1,26 +1,21 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Login from './components/layouts/login'
-import Dashboard from './components/layouts/dashboard'
+import LoginPage from './components/pages/loginPage'
+import Dashboard from './components/layouts/allComponents'
 import RegisterUser from './components/layouts/registerUser'
-import Lobbies from './components/layouts/lobbies/lobbies'
+import LobbiesPage from './components/pages/lobbiesPage'
 import ProtectedRoute from './components/organisms/protectedRoute'
-import { useTheme } from './hooks/useTheme'
+import User from './components/atoms/user'
 
 function App () {
-  const { theme, toggleTheme } = useTheme()
   return (
-    <div id={theme} className="block">
-      <header className={`z-10 sticky w-full h-12 ${theme === 'light' ? 'bg-white' : 'bg-slate-700'}`}>
-        <nav className='w-full h-12'>
-          <button className='btn' onClick={toggleTheme}>{theme === 'light' ? 'dark' : 'light'}</button>
-        </nav>
-      </header>
+    <div className="block">
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/register" element={<RegisterUser />} />
-          <Route path="/lobbies" element={<ProtectedRoute><Lobbies /></ProtectedRoute>} />
+          <Route path="/lobbies" element={<ProtectedRoute><LobbiesPage /></ProtectedRoute>} />
+          <Route path="/user" element={<User />} />
         </Routes>
       </Router>
     </div>
