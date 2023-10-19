@@ -2,8 +2,18 @@ import { useNavigate } from 'react-router-dom'
 import { auth } from '../../main'
 import { ToastContainer, toast } from 'react-toastify'
 import { useState } from 'react'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import 'react-toastify/dist/ReactToastify.css'
+
+export const handleLogout = async () => {
+  try {
+    await signOut(auth)
+    // Haz cualquier limpieza o redireccionamiento necesario después del cierre de sesión
+  } catch (error) {
+    // Maneja cualquier error que pueda ocurrir durante el cierre de sesión
+    console.error('Error al cerrar sesión:', error)
+  }
+}
 
 function Login () {
   const navigate = useNavigate()

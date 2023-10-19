@@ -4,7 +4,7 @@ import NavBar from '../atoms/nav/navigationBar'
 function LobbiesPage () {
   return (
     <div className="">
-      <div className="q">
+      <div className="">
         <NavBar></NavBar>
       </div>
       <div className="">

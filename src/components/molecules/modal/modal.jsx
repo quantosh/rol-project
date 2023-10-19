@@ -4,12 +4,11 @@ const Modal = ({ show, title, handleClose, handleAction, textValue, setTextValue
   }
 
   return (
-        <dialog id="modal_notification " className="card">
-            <div className="card-body ">
+        <dialog id="modal_notification" className="card bg-primary text-primary-content">
+            <div className="flex card-body gap-2">
                 <form className="dialog bg-slate-300">
-                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={handleClose}>✕</button>
                 </form>
-
                 <h3 className="font-bold text-lg">{title}</h3>
                 <div className="flex gap-1">
                     {!hideTextBox && (

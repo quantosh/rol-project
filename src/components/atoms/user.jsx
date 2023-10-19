@@ -1,4 +1,4 @@
-function User () {
+function UserProfile () {
   return (
     <div className="max-w-fit ">
       <div className="q">
@@ -22,4 +22,4 @@ function User () {
   )
 }
 
-export default User
+export default UserProfile

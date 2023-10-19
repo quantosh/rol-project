@@ -1,5 +1,6 @@
 import BurguerMenu from './burguerMenu'
 import HandleDarkTheme from './handleDarkTheme'
+import UserBubble from './userBubble'
 
 function NavigationBar () {
   return (
@@ -10,8 +11,9 @@ function NavigationBar () {
       <div className="navbar-center">
         <img src="src\assets\rl-temp-white.png" width="180px" alt="" />
       </div>
-      <div className="navbar-end">
+      <div className="navbar-end gap-1">
         <HandleDarkTheme />
+        <UserBubble></UserBubble>
       </div>
     </div>
   )
