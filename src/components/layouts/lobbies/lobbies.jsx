@@ -237,7 +237,7 @@ const Lobbies = () => {
               <tr key={lobby.id || index} className='hover:bg-gray-100'>
                 <td>{lobby.name}</td>
                 <td>{lobby.code}</td>
-                <td>{lobby.joinedUsers.length}</td>
+                <td>{lobby.joinedUsers?.length}</td>
                 <td>
                   <button onClick={() => deleteLobby(lobby)}>
                     🗑️

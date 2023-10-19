@@ -7,8 +7,10 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="loading-component">
-        <span className="loading loading-spinner text-primary"></span>
+      <div className="w-full h-[100vh] flex align-center justify-center items-center">
+        <div className="loading-component">
+          <span className="loading loading-spinner text-primary"></span>
+        </div>
       </div>
     )
   }
