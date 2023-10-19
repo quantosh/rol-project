@@ -17,7 +17,7 @@ const Lobbies = () => {
   const navigate = useNavigate();
 
   const navigateToLobby = (lobbyId) => {
-    navigate(`/lobbies/${lobbyId}`);
+    navigate(`/lobby/${lobbyId}`);
   };
 
 
