@@ -19,7 +19,7 @@ function CharacterInfo () {
       </div>
       <div className="bg-lime-400 text-xs p-1 ">
         <ul className="">
-        <li className="mr-2">
+          <li className="mr-2">
             <p>💪</p>
             <p>Fuerza</p>
             <p>9</p>
