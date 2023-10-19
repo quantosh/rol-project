@@ -9,9 +9,9 @@ import { v4 as uuidv4 } from 'uuid'
 import 'react-toastify/dist/ReactToastify.css'
 
 const Lobbies = () => {
-  const [joinModalVisible, setJoinModalVisible] = useState(false)
+  const [, setJoinModalVisible] = useState(false)
   const [inputLobbyCode, setInputLobbyCode] = useState('')
-  const [createModalVisible, setCreateModalVisible] = useState(false)
+  const [, setCreateModalVisible] = useState(false)
   const [lobbyName, setLobbyName] = useState('')
   const [joinedLobbies, setJoinedLobbies] = useState([])
   const navigate = useNavigate()
