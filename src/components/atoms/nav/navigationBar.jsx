@@ -4,7 +4,7 @@ import UserBubble from './userBubble'
 
 function NavigationBar () {
   return (
-    <div className="navbar bg-primary text-primary-content">
+    <div className="navbar bg-gradient-to-r from-indigo-600 via-[#6419e6] to-indigo-600 text-primary-content">
       <div className="ml-2 navbar-start">
         <BurguerMenu />
       </div>
