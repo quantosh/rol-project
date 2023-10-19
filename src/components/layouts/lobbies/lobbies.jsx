@@ -146,7 +146,8 @@ const Lobbies = () => {
       const newLobby = {
         code: uuidv4().substring(0, 8),
         name: lobbyName.trim(),
-        creator: user.email
+        creator: user.email,
+        type: 'custom'
       }
 
       const userDocRef = await getCurrentUserDocRef();
