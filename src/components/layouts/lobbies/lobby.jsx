@@ -73,21 +73,32 @@ const Lobby = () => {
       <Modal
         show={modalOpen}
         title="Select a Character Sheet"
-        handleClose={() => {}} // Prevents the modal from being closed on clicking the close button or outside the modal
+        handleClose={() => { }}
         handleAction={handleSheetSelect}
         actionButtonText="Select"
       >
-        <select
-          value={selectedSheet}
-          onChange={(e) => setSelectedSheet(e.target.value)}
-          disabled={userSheets.length === 0} // Disable select if no sheets available
-        >
-          <option value="">{userSheets.length === 0 ? 'No character sheets available' : 'Select a character sheet'}</option>
-          {userSheets.map(sheet => (
-            <option key={sheet.id} value={sheet.id}>{sheet.name}</option>
-          ))}
-        </select>
-        <button onClick={createNewSheet}>Create New Sheet</button>
+        {userSheets.length > 0 && !userSheets.every(sheet => sheet.name === '')
+          ? (
+            <div>
+              <select
+                value={selectedSheet}
+                onChange={(e) => setSelectedSheet(e.target.value)}
+                disabled={userSheets.length === 0}
+              >
+                {userSheets.map(sheet => (
+                  <option key={sheet.id} value={sheet.id}>{sheet.name}</option>
+                ))}
+              </select>
+              <button onClick={createNewSheet}>Create New Sheet</button>
+            </div>
+          )
+          : (
+            <div>
+              <p>No character sheets available. Please create one.</p>
+              <button onClick={createNewSheet}>Create New Sheet</button>
+            </div>
+          )
+        }
       </Modal>
     </div>
   )
