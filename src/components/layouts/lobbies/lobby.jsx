@@ -73,32 +73,29 @@ const Lobby = () => {
       <Modal
         show={modalOpen}
         title="Select a Character Sheet"
-        handleClose={() => { }}
+        handleClose={() => {}}
         handleAction={handleSheetSelect}
         actionButtonText="Select"
       >
-        {userSheets.length > 0 && !userSheets.every(sheet => sheet.name === '')
-          ? (
-            <div>
+        <div>
+          {userSheets.length > 0
+            ? (
               <select
                 value={selectedSheet}
                 onChange={(e) => setSelectedSheet(e.target.value)}
-                disabled={userSheets.length === 0}
               >
+                <option value="">Select a character sheet</option> {/* Placeholder */}
                 {userSheets.map(sheet => (
                   <option key={sheet.id} value={sheet.id}>{sheet.name}</option>
                 ))}
               </select>
-              <button onClick={createNewSheet}>Create New Sheet</button>
-            </div>
-          )
-          : (
-            <div>
-              <p>No character sheets available. Please create one.</p>
-              <button onClick={createNewSheet}>Create New Sheet</button>
-            </div>
-          )
-        }
+            )
+            : (
+              <p>No character sheets available.</p>
+            )
+          }
+          <button onClick={createNewSheet} style={{ marginTop: '10px' }}>Create New Sheet</button> {/* Button is always available */}
+        </div>
       </Modal>
     </div>
   )
